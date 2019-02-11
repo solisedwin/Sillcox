@@ -1,0 +1,216 @@
+
+*{
+	margin: 0px;
+	padding: 0px;
+	overflow-x: hidden;
+	overflow-y: hidden;
+
+	background-color: #b0c5e8;
+
+	
+
+}
+
+
+
+.error {
+	color: red;
+	text-decoration: none;
+	background-color: inherit;
+
+}
+
+
+
+
+label{
+
+	font-size: 40px;
+	font-weight: bold;
+}
+
+
+p{
+	color: white;
+	font-size: 21px;
+
+}
+
+
+
+#message {
+
+text-decoration-color: white;
+margin-top: 300px;
+position: absolute;
+width: 500px;
+
+margin-left: 200px;
+
+word-wrap: break-word;
+
+
+}
+
+
+form {
+	background-color: inherit;
+	margin-top: 32px;
+}
+
+
+
+.enter {
+
+	border-style: solid;
+	border-color: black;
+	border-radius: 20px;
+
+
+	height: 550px;
+	width: 550px;
+
+	margin-top: 70px;
+	margin-left: 1200px;
+
+	background-color: #a7d1cb;
+
+
+
+}
+
+
+
+.enter p{
+
+text-decoration: underline;
+color: blue;
+background-color: inherit;
+
+cursor: pointer;
+
+width: 500px;
+
+margin-left: 20px;
+
+
+
+}
+
+
+.enter form input {
+
+	margin-top: 20px;
+	margin-left: 30px;	
+
+}
+
+
+
+input[type=email] {
+
+
+	width: 70%;
+    
+    padding: 14px 20px;
+    margin: 8px 0;
+
+    border-radius: 4px;
+    border-color: green;
+    border-width: 6px;
+
+
+    background-color: white;
+
+
+}
+
+input[type=submit]{
+
+	background-color: red;
+	width: 70%;	
+	min-height: 40px;
+
+	border-color: green;
+	border-radius: 4px;
+}
+
+
+input[type = password]{
+	width: 70%;
+    
+    padding: 14px 20px;
+    margin: 8px 0;
+
+    border-radius: 4px;
+    border-color: green;
+    border-width: 6px;
+
+
+    background-color: white;
+
+
+}
+
+input[type=text] {
+	width: 70%;
+    
+    padding: 14px 20px;
+    margin: 8px 0;
+
+    border-radius: 4px;
+    border-color: green;
+    border-width: 6px;
+
+    background-color: white;
+
+
+}
+
+
+footer{
+
+	border-style: solid;
+	border-color: black;
+
+	background-color: #565759;
+
+
+	margin-top: 240px;
+
+	width: 100%;
+	height: 200px;
+
+}
+
+
+#fb_img {
+
+	background-color: inherit;
+	height: 150px;
+	width: 150px;
+	margin-left: 720px;
+
+
+}
+
+
+
+#privacy_img {
+
+height: 137px;
+width: 150px;
+
+background-color: inherit;
+
+margin-left: 100px;
+
+
+}
+
+
+
+
+
+
+
