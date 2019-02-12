@@ -6,8 +6,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-
-
 /**
 * 
 */
@@ -15,13 +13,12 @@ class SignUp {
 
 	private $conn;
 
-	
 	function __construct(){
 		
-		$_SESSION['email'] = trim($_POST['SignUp_Email']);
-		$_SESSION['username'] = trim($_POST['SignUp_Username']);
-		$_SESSION['password'] = trim($_POST['SignUp_Password']);
-		$_SESSION['password_again'] = trim($_POST['SignUp_Password_again']);
+		$_SESSION['email'] =  $_POST['SignUp_Email'];
+		$_SESSION['username'] = $_POST['SignUp_Username'];
+		$_SESSION['password'] =  $_POST['SignUp_Password'];
+		$_SESSION['password_again'] = $_POST['SignUp_Password_again'];
 
 	}
 
@@ -126,19 +123,38 @@ class SignUp {
 
 
 
-
-
-
-
 	function canRegister(){
 		
 		$this->is_sillcox_scholar();	
 		$this->usernameTaken();
 		$this->passwordCheck();
-		$this->validPassword();
-	
-
+		$this->validPassword();	
 	}
+
+
+
+	function insert_new_user(){
+
+		$username = $_SESSION['username'];
+		$email = $_SESSION['email'];
+
+		$password = $_SESSION['password'];
+
+		require('Encryption.php');
+	
+		$hashingObject = new Encryption();
+		$hash = $hashingObject->encrypt($password);
+		$admin = 0;
+
+		$stmt = $this->conn->prepare("INSERT INTO Info (Email, Username, Password, Admin) VALUES (?, ?, ?,?)");
+		$stmt->bind_param("sssi", $_SESSION['email'] , $_SESSION['username'] , $hash ,$admin);
+		$stmt->execute();
+		$stmt->close();
+ 	
+	}
+
+
+
 
 
 
@@ -147,9 +163,9 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','fakepassword123','Sillcox');
+$signup_obj->connect('localhost','root','xxxxxxxxxx','Sillcox');
 $signup_obj->canRegister();
-
+$signup_obj->insert_new_user();
 
 
 
