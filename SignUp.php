@@ -15,10 +15,10 @@ class SignUp {
 
 	function __construct(){
 		
-		$_SESSION['email'] =  $_POST['SignUp_Email'];
-		$_SESSION['username'] = $_POST['SignUp_Username'];
-		$_SESSION['password'] =  $_POST['SignUp_Password'];
-		$_SESSION['password_again'] = $_POST['SignUp_Password_again'];
+		$_SESSION['su_email'] =  $_POST['SignUp_Email'];
+		$_SESSION['su_username'] = $_POST['SignUp_Username'];
+		$_SESSION['su_password'] =  $_POST['SignUp_Password'];
+		$_SESSION['su_password_again'] = $_POST['SignUp_Password_again'];
 
 	}
 
@@ -47,8 +47,8 @@ class SignUp {
 
 	function passwordCheck(){
 
-		$password = $_SESSION['password'];
-		$password_again = $_SESSION['password_again'];
+		$password = $_SESSION['su_password'];
+		$password_again = $_SESSION['su_password_again'];
 
 		if(strtolower($password) != strtolower($password_again)){
 			header('location: index.php?error=passwd');
@@ -62,12 +62,13 @@ class SignUp {
 
 
 	function is_sillcox_scholar(){
-		$email = $_SESSION['email'];	
+		$email = $_SESSION['su_email'];	
 
 		if(strpos(file_get_contents('Scholars.txt'), $email) !== false){
 			echo '| Email is in file';
 		}else{
 			header('location: index.php?error=scholars');
+			die();
 		}
 
 	}
@@ -76,12 +77,14 @@ class SignUp {
 	
 	function usernameTaken(){
 
-	$username = $_SESSION['username'];
+	$username = $_SESSION['su_username'];
 		
 	if(strlen($username) < 4){
 		header('location: index.php?error=short_user');
+		die();
 	} if(strlen($username) > 20){
 		header('location: index.php?error=long_user');
+		die();
 	}
 
 	
@@ -91,6 +94,8 @@ class SignUp {
 	
 	if($result->num_rows  > 0){
 		header('location: index.php?error=username');
+		die();
+
 	}
 
 }		
@@ -99,33 +104,55 @@ class SignUp {
 	
 	function validPassword(){
 
-		$password = $_SESSION['password'];
+		$password = $_SESSION['su_password'];
 
 		if(strlen($password) < 4){
 			header('location: index.php?error=short_pd');
+			die();
+
 		}
 		if(strlen($password) > 25){
 			header('location: index.php?error=long_pd');
+			die();
 		}
 
 		if(!preg_match('@[0-9]@', $password)){
 			header('location: index.php?error=num_pd');
+			die();
 		}
 		if(! preg_match('@[a-z]@', $password)){
 			header('location: index.php?=error=lower_pd');
+			die();
 		} 
 		if(!preg_match('@[A-Z]@', $password)){
 			header('location: index.php?error=upper_pd');
+			die();
 		}
 
 	}
 
 
 
+	function emailTaken(){
+
+		$email = $_SESSION['su_email'];
+		$email_query = "SELECT * FROM Info Where Email = '$email';";	
+		$result = $this->query($email_query);
+
+		if($result->num_rows  > 0){
+			header('location: index.php?error=email_taken');
+			die();
+		}
+
+
+
+	}
+
 
 	function canRegister(){
 		
 		$this->is_sillcox_scholar();	
+		$this->emailTaken();
 		$this->usernameTaken();
 		$this->passwordCheck();
 		$this->validPassword();	
@@ -135,10 +162,10 @@ class SignUp {
 
 	function insert_new_user(){
 
-		$username = $_SESSION['username'];
-		$email = $_SESSION['email'];
+		$username = $_SESSION['su_username'];
+		$email = $_SESSION['su_email'];
 
-		$password = $_SESSION['password'];
+		$password = $_SESSION['su_password'];
 
 		require('Encryption.php');
 	
@@ -147,7 +174,7 @@ class SignUp {
 		$admin = 0;
 
 		$stmt = $this->conn->prepare("INSERT INTO Info (Email, Username, Password, Admin) VALUES (?, ?, ?,?)");
-		$stmt->bind_param("sssi", $_SESSION['email'] , $_SESSION['username'] , $hash ,$admin);
+		$stmt->bind_param("sssi", $_SESSION['su_email'] , $_SESSION['su_username'] , $hash ,$admin);
 		$stmt->execute();
 		$stmt->close();
  	
@@ -163,10 +190,10 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxxxxxxx','Sillcox');
+$signup_obj->connect('localhost','root','xxxxxxx','Sillcox');
 $signup_obj->canRegister();
 $signup_obj->insert_new_user();
-
+header('location: hub.php');
 
 
 ?>

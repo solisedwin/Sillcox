@@ -74,6 +74,10 @@ if(strpos($fullUrl, 'error=scholars')){
 	echo "<text class = 'error'> Password is too long. Sorry </text>	";
 }else if (strpos($fullUrl, 'error=long_user')) {
 	echo "<text class = 'error'> Username is too long. Sorry </text>	";
+}else if (strpos($fullUrl, 'error=email_taken')) {
+	echo "<text class = 'error'> Email is already taken !! Account already made !! </text>	";
+}else{
+
 }
 
 
@@ -108,6 +112,23 @@ if(strpos($fullUrl, 'error=scholars')){
 	
 	<h1 style="background-color: inherit;	margin-top: 0px; margin-left: 150px;"> Sign In</h1>
 	<p   onclick="show_signUp()">Don't have an account? Create an account</p>
+
+
+
+<?php
+if(strpos($fullUrl, 'error=login_err')){
+	echo "<text class = 'error'> Login Error ! Input isnt correct </text>";
+}
+
+
+?>
+
+
+
+
+
+
+
 
 
 
