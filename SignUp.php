@@ -20,6 +20,7 @@ class SignUp {
 		$_SESSION['su_password'] =  $_POST['SignUp_Password'];
 		$_SESSION['su_password_again'] = $_POST['SignUp_Password_again'];
 
+
 	}
 
 	//closes mysql conneciton
@@ -167,7 +168,7 @@ class SignUp {
 
 		$password = $_SESSION['su_password'];
 
-		require('Encryption.php');
+		require('Encryption.php');	
 	
 		$hashingObject = new Encryption();
 		$hash = $hashingObject->encrypt($password);
@@ -181,11 +182,6 @@ class SignUp {
 	}
 
 
-
-
-
-
-
 }//end of class 
 
 
@@ -193,7 +189,15 @@ $signup_obj = new SignUp();
 $signup_obj->connect('localhost','root','xxxxxxx','Sillcox');
 $signup_obj->canRegister();
 $signup_obj->insert_new_user();
-header('location: hub.php');
+
+$_SESSION['authenticated'] = True;
+$_SESSION['username'] = $_SESSION['su_username'];
+$_SESSION['password'] = $_SESSION['su_password'];
+			
+
+
+
+header('location: Hub.php');
 
 
 ?>

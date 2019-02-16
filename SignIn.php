@@ -12,8 +12,9 @@ session_start();
 		
 			$_SESSION['username'] = $_POST['SignIn_Username'];
 			$_SESSION['password'] = $_POST['SignIn_Password'];
+			
 
-			$this->connect('localhost','root','xxxxx','Sillcox');
+			$this->connect('localhost','root','xxxxxxxxxxx','Sillcox');
 
 		}
 
@@ -34,7 +35,7 @@ session_start();
 			}else{
 				echo '| Connected successfully';
 			}
-	}
+		}
 	
 
 
@@ -62,7 +63,8 @@ session_start();
 			echo 'Valid Password: ' . $is_valid_password;
 
 			if($is_valid_password){
-				header('location: hub.php');
+				$_SESSION['authenticated'] = True;
+				header('location: Hub.php');
 			}else{
 				header('location: index.php?error=login_err');
 				die();
@@ -74,7 +76,6 @@ session_start();
 
 	$signIn = new SignIn();
 	$signIn->sqlValidate();
-
 
 
 ?>

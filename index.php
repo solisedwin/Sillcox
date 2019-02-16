@@ -3,6 +3,8 @@
 <?php
 
 	session_start();
+	$_SESSION['authenticated'] = False;
+
 ?>
 
 
@@ -10,7 +12,7 @@
 <head>
 	<title>Sillcox Home Page</title>
 
-	<link rel="stylesheet" type="text/css" href="index.css">
+	<link rel="stylesheet" type="text/css" href="css/index.css">
 
 </head>
 
@@ -80,9 +82,6 @@ if(strpos($fullUrl, 'error=scholars')){
 
 }
 
-
-
-
 ?>
 
 
@@ -122,13 +121,6 @@ if(strpos($fullUrl, 'error=login_err')){
 
 
 ?>
-
-
-
-
-
-
-
 
 
 
@@ -184,8 +176,6 @@ function facebook_group(){
 	window.location.href = 'https://www.facebook.com/groups/785289731586913/';
 
 }
-
-
 
 
 
