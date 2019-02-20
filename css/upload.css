@@ -1,0 +1,146 @@
+
+* {
+
+	margin: 0px;
+	padding: 0px;
+	
+}
+
+
+
+body {
+
+	background-color: #e5e4dc;
+
+
+}
+
+
+
+header {
+
+	background-color: #3a3e44;
+	width: 100%;
+	height: 130px;
+	position: relative;
+
+}
+
+
+.header_btn {
+
+
+	color: white;
+	font-size: 25px;
+	float: right;
+
+	border-style: solid;
+	border-color: white;
+
+	padding-left: 10px;
+	padding-right: 10px;
+
+	margin-right: 20px;
+	margin-top: 40px;
+
+	position: relative;
+
+	cursor: pointer;
+
+}
+
+
+#header_greeting {
+
+	color: white;
+	font-size: 27px;
+	position: absolute;
+	bottom: 0px;
+}
+
+
+
+#msg {
+
+
+	border-style: solid;
+	border-color: black;
+
+	width: 40%;
+	height: 170px;
+
+	margin-left: 600px;
+	margin-top: 40px;
+
+	background-color: #b3bfd1;
+
+}
+
+#msg p {
+
+	color: white;
+	font-size: 18px;
+
+}
+
+
+#submit_form {
+
+
+	border-style: dotted;
+	border-color: black;
+
+	height: 550px;
+	width: 40%;
+
+	margin-top: 70px;
+}
+
+
+.submit_div {
+
+
+	display: inline-block;
+	border-style: solid;
+	height: 50px;
+	width: 800px;
+
+	float: left;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

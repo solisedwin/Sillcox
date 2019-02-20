@@ -186,7 +186,7 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxxxx','Sillcox');
+$signup_obj->connect('localhost','root','xxxxxxxxxxxxx','Sillcox');
 $signup_obj->canRegister();
 $signup_obj->insert_new_user();
 

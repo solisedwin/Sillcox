@@ -2,6 +2,7 @@
 
 <?php
 
+
 	session_start();
 	$_SESSION['authenticated'] = False;
 
@@ -78,7 +79,10 @@ if(strpos($fullUrl, 'error=scholars')){
 	echo "<text class = 'error'> Username is too long. Sorry </text>	";
 }else if (strpos($fullUrl, 'error=email_taken')) {
 	echo "<text class = 'error'> Email is already taken !! Account already made !! </text>	";
-}else{
+}else if (strpos($fullUrl, 'stat=logout')) {
+	session_destroy();
+}
+else{
 
 }
 

@@ -7,6 +7,14 @@
 }
 
 
+body {
+
+	overflow-x: hidden;
+	background-color: white;
+
+
+}
+
 
 header {
 
@@ -19,6 +27,7 @@ header {
 
 	background-color: #b0c5e8;	
 
+
 }
 
 header img {
@@ -30,13 +39,16 @@ header img {
 	margin-left: 10px;	
 }
 
+
+
+
 input[type=search]{
 
 	position: absolute;
 
 	margin-left: 70px;
 	
-	height: 60px;
+	height: 60px; 
 	width: 300px;
 
 	background-color: #e0e1e2;
@@ -50,8 +62,20 @@ input[type=search]{
 
 }
 
+#search_icon {
 
-#logOut_div{
+	height: 60px;
+	width: 70px;
+	position: absolute;
+	margin-left: 370px;
+	margin-top: 30px;
+
+}
+
+
+
+
+#logOut_div{	
 
 	border-style: solid;
 	border-color: black;
@@ -63,10 +87,41 @@ input[type=search]{
 	margin-top: 30px;
 
 	display: inline-block;
-
+	
 	float: right;
 
+	position: inherit;
+
 }
+
+
+
+
+#upload_span {
+
+	width: 200px;
+	height: 55px;	
+
+
+	display: inline;
+	border-style: solid;
+	border-color: black;
+
+	margin-left: 800px;
+
+	position: absolute;
+
+	margin-top: 10px;
+	padding-left: 10px;
+	padding-top: 25px;
+
+	border: dashed;
+
+
+}
+
+
+
 
 
 
@@ -80,8 +135,42 @@ header p {
 
 	color: black;
 
+}
+
+
+#notes_div {
+
+	height: 750px;
+	scroll-behavior: auto;
+	width: 800px;
+
+	border-style: solid;
+	border-color: black;
+
+	margin-top: 70px;
+
+	border-radius: 10px;
+
+
 
 }
+
+#notes_div span {
+
+	border-style: solid;
+	border-color: green;
+	position: absolute;
+
+}
+
+
+
+
+
+
+
+
+
 
 
 

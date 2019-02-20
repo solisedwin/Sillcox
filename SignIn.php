@@ -13,8 +13,7 @@ session_start();
 			$_SESSION['username'] = $_POST['SignIn_Username'];
 			$_SESSION['password'] = $_POST['SignIn_Password'];
 			
-
-			$this->connect('localhost','root','xxxxxxxxxxx','Sillcox');
+			$this->connect('localhost','root','xxxxxxxx','Sillcox');
 
 		}
 
@@ -38,6 +37,20 @@ session_start();
 		}
 	
 
+		function isAdmin($user){
+
+			$adminQuery = "SELECT Admin FROM Info Where Username = '$user'";
+
+			echo '  ' . $adminQuery;
+
+			$result = $this->query($adminQuery);
+
+			$rows = $result->fetch_assoc();
+			$_SESSION['admin'] = $rows['Admin'];
+
+		}
+
+
 
 
 		function sqlValidate(){
@@ -50,21 +63,22 @@ session_start();
 
 			$sql_encrypt_password = '';
 
-			while ($row = $result->fetch_assoc()) {
-				$sql_encrypt_password =  $row['Password'];
-				break;
-			}
+			$row = $result->fetch_assoc(); 
+			$sql_encrypt_password =  $row['Password'];
+				
 
 			require('Encryption.php');
 			$obj = new Encryption();
 			
 			$is_valid_password = $obj->verify($password, $sql_encrypt_password);
-
 			echo 'Valid Password: ' . $is_valid_password;
 
 			if($is_valid_password){
+			
+				$this->isAdmin($user);
 				$_SESSION['authenticated'] = True;
 				header('location: Hub.php');
+			
 			}else{
 				header('location: index.php?error=login_err');
 				die();
@@ -76,6 +90,7 @@ session_start();
 
 	$signIn = new SignIn();
 	$signIn->sqlValidate();
+
 
 
 ?>
