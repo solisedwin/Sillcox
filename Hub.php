@@ -72,14 +72,6 @@ if(!($_SESSION['authenticated'])){
 
 
 
-
-
-
-
-
-
-
-
 <script type="text/javascript">
 	
 

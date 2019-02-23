@@ -74,7 +74,7 @@ header {
 
 	background-color: #b3bfd1;
 
-}
+}	
 
 #msg p {
 
@@ -90,35 +90,89 @@ header {
 	border-style: dotted;
 	border-color: black;
 
-	height: 550px;
+	height: auto;	
 	width: 40%;
 
-	margin-top: 70px;
+	margin-top: 50px;
 }
 
 
-.submit_div {
+.submit_span {
 
 
-	display: inline-block;
-	border-style: solid;
-	height: 50px;
-	width: 800px;
+	border-bottom-style: solid;
+	border-bottom-color: black;
+
+	position: relative;
+}
+
+
+.submit_span label ,select {
 
 	float: left;
+	margin-right: 10px;
+
+}
+
+textarea {
+
+margin-top: 30px;
+
+}
+
+input[type = file]{
+	color: red;
+	width: 100px;
+
+}
+
+#file_div {
+
+	float: left;
+	margin-left: 20px;
+
+	border-style: dotted;
+	border-radius: 5px;
+	display: inline-block;
+	width: 500px;
+
+	
+
+}
+
+#files_selected_div {
+
+	border-style: solid;
+	border-color: black;
+	border-width: 2px;
+
+	height: auto;
 
 
 }
 
 
 
+input[type = submit]{
+
+	margin-top: 10px;
+	margin-bottom: 5px;
+
+	border-style: solid;
+	border-color: black;
+	
+	height: 35px;
+	width: 170px;
+	
+	background-color: #b3bfd1;
+
+	font-size: 20px;
+
+	color: black;
 
 
 
-
-
-
-
+}
 
 
 

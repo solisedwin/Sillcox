@@ -58,7 +58,7 @@ session_start();
 
 			<br><br>
 			All submissions	will be sent to the website email for further inspection. Your email will be used to give credit
-			of your submission.    
+			for your submission.    
 
 			</p>
 
@@ -69,14 +69,14 @@ session_start();
 
 	<div id = 'submit_form'>
 
-		<form action="submission.php" action="POST">
+		<form action="Submission.php" method="GET">
 		
 
-			<div class="submit_div">
+			<span class="submit_span">
 				
-				<b>	<label for="course">Courses</label> </b>
+				<b>	<label for="course" style="font-size: 19px; ">Courses</label> </b>
 
-					<select>
+					<select name="select_course" 	style="width: 200px; height: 31px;">
 						<option value="precalc">Pre Calculus</option>
 						<option value="calcI">Calculus I</option>
 						<option value="calcII">Calculus II</option>
@@ -95,17 +95,51 @@ session_start();
 						<option value="microEco">Micro Economics</option>
 					</select>
 
+					<br>
+					
+					<br>
+			<b>	<label>If Subject isnt listed, write it.<input type="text" placeholder="Specific Subject" name="specific_subject"> </label>  </b>
 
-			</div>	
+			</span>	
+			<br><br>
+
+			<hr>
+
+		<b>	<label  >Have a specific message involving the notes being sent? Please write the message below.</label> </b>
+			<textarea value = 'textarea' cols="70" rows="7" style="font-size: 13px; margin-bottom: 10px;" name = 'msg'>
+				
+
+			</textarea>
+
+		</form>
+			
+			<hr style="position: inherit; top: 10px;">
 
 
+		<form action="Submission.php" method="POST">
 
+			<div  id = 'file_div'>
 
+				<b>	<label>Submit Files</label> </b>
 
+				<input type="file" name="inputFiles" onchange="displayFile(this.value)" value="files" style="cursor: pointer;">
+				<input type="reset" value="Reset" onclick="clear_para()" style="cursor: pointer;">
+
+			</div><br> <br> <br>	
+
+			<div id="files_selected_div">
+				<p id="files_selected_para" style="height: auto; width: auto;">
+					
+				</p>
+			</div>
+				
+			<input type="submit" value="Submit Files" style="cursor: pointer;">
 
 
 		</form>
 
+
+	<!-- end of submit form div -->	
 	</div>
 
 
@@ -126,6 +160,15 @@ session_start();
 
 <script type="text/javascript">		
 
+	function clear_para(){
+
+		var para = document.getElementById('files_selected_para');
+		para.innerHTML = '';
+
+	}
+
+
+
 	function redirect_btn(whereTo) {
 	
 		if(whereTo == 'home'){
@@ -135,6 +178,27 @@ session_start();
 		}
 
 	}
+
+
+	function displayFile(val){
+
+		var fileName = val.substr(val.lastIndexOf("\\")+1, val.length);
+    	document.getElementById("files_selected_para").innerHTML +=	'<br>' + fileName ;
+
+	}
+
+	function clear(val){
+
+
+
+
+
+
+	}
+
+
+
+
 
 </script>
 
