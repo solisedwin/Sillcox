@@ -15,7 +15,13 @@ body {
 
 }
 
+.error {
 
+	color: red;
+	font-size: 18px;
+	position: relative;
+
+}
 
 header {
 
@@ -169,8 +175,6 @@ input[type = submit]{
 	font-size: 20px;
 
 	color: black;
-
-
 
 }
 

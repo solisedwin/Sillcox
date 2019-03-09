@@ -13,7 +13,7 @@ session_start();
 			$_SESSION['username'] = $_POST['SignIn_Username'];
 			$_SESSION['password'] = $_POST['SignIn_Password'];
 			
-			$this->connect('localhost','root','xxxxxxxxx','xxxxxx');
+			$this->connect('localhost','root','xxxxxx','xxxxxx');
 
 		}
 
@@ -77,9 +77,11 @@ session_start();
 			
 				$this->isAdmin($user);
 				$_SESSION['authenticated'] = True;
+				$this->closeConnection();
 				header('location: Hub.php');
 			
 			}else{
+				$this->closeConnection();
 				header('location: index.php?error=login_err');
 				die();
 			}

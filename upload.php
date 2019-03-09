@@ -5,6 +5,12 @@
 
 session_start();
 
+
+if(!($_SESSION['authenticated'])){
+	header('location: index.php');
+}
+
+
 ?>
 
 <head>
@@ -15,8 +21,8 @@ session_start();
 <body>
 
 
+
 	<header>
-	
 
 	<div>
 		
@@ -49,6 +55,9 @@ session_start();
 
 
 
+
+
+
 	<div id = 'msg'>
 			<p>
 				
@@ -69,12 +78,11 @@ session_start();
 
 	<div id = 'submit_form'>
 
-		<form action="Submission.php" method="GET">
+		<form action="Submission.php" method="POST" enctype = "multipart/form-data">
 		
-
 			<span class="submit_span">
 				
-				<b>	<label for="course" style="font-size: 19px; ">Courses</label> </b>
+				<b>	<label  style="font-size: 19px; ">Courses</label> </b>
 
 					<select name="select_course" 	style="width: 200px; height: 31px;">
 						<option value="precalc">Pre Calculus</option>
@@ -106,23 +114,23 @@ session_start();
 			<hr>
 
 		<b>	<label  >Have a specific message involving the notes being sent? Please write the message below.</label> </b>
-			<textarea value = 'textarea' cols="70" rows="7" style="font-size: 13px; margin-bottom: 10px;" name = 'msg'>
+			<textarea  cols="70" rows="7" style="font-size: 13px; margin-bottom: 10px;" name = 'msg'>
 				
 
 			</textarea>
 
-		</form>
+		
 			
 			<hr style="position: inherit; top: 10px;">
 
 
-		<form action="Submission.php" method="POST">
+	
 
 			<div  id = 'file_div'>
 
 				<b>	<label>Submit Files</label> </b>
 
-				<input type="file" name="inputFiles" onchange="displayFile(this.value)" value="files" style="cursor: pointer;">
+				<input type="file" name="files[]"   id = 'selected_files'   size="9" multiple onchange="displayFile(this.value)"  style="cursor: pointer;">
 				<input type="reset" value="Reset" onclick="clear_para()" style="cursor: pointer;">
 
 			</div><br> <br> <br>	
@@ -130,10 +138,12 @@ session_start();
 			<div id="files_selected_div">
 				<p id="files_selected_para" style="height: auto; width: auto;">
 					
+			
+
 				</p>
 			</div>
 				
-			<input type="submit" value="Submit Files" style="cursor: pointer;">
+			<input type="submit" value="Submit Files" name = 'submit' style="cursor: pointer;">
 
 
 		</form>
@@ -143,10 +153,61 @@ session_start();
 	</div>
 
 
+
+		<?php
+
+		$error = $_SERVER['QUERY_STRING'];	
+		$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
+
+		if(strpos($fullUrl, 'error=empty')){
+		echo "<text class = 'error'> Error ! You didnt upload any files.  </text>";
+		}else if (strpos($fullUrl, 'error=size')){
+		echo "<text class = 'error'> Error ! File size is too large! Try to upload smaller files or one at a time. </text>";
+		}else if (strpos($fullUrl, '~')) {
+			$invalid_ext_string = substr($fullUrl, strpos($fullUrl,'~') + 1);
+			$invalid_extensions = explode('~', $invalid_ext_string);	
+			$ext_list = '';
+
+			foreach ($invalid_extensions as $fileName) {
+				$ext_list .= $fileName . ',';	
+			}
+
+			//Counts occurences of '~', to know which message to display
+			if(substr_count($ext_list, ',') == 1){
+
+				echo "<text class = 'error'> $ext_list file couldnt be uploaded because of its extension. </text>";
+				echo '<br>';
+				echo "<text class = 'error'> Please view list of valid extensions to upload files above. </text>";
+
+			}else{
+
+			echo "<text class = 'error'> $ext_list couldnt be uploaded because of their extensions. </text>";
+			echo '<br>';
+			echo "<text class = 'error'> Please view list of valid extensions to upload files above. </text>";
+
+		}
+
+
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+		?>
+
+
+
+
 	</center>
-
-
-
 
 
 
@@ -182,23 +243,16 @@ session_start();
 
 	function displayFile(val){
 
-		var fileName = val.substr(val.lastIndexOf("\\")+1, val.length);
-    	document.getElementById("files_selected_para").innerHTML +=	'<br>' + fileName ;
+		var files = document.getElementById("selected_files").files;
+
+		for (var i = 0; i < files.length; i++) {
+ 			//alert(files[i].name);
+			var para = document.getElementById('files_selected_para');
+			para.innerHTML += files[i].name  + '<br>';
+
+		}
 
 	}
-
-	function clear(val){
-
-
-
-
-
-
-	}
-
-
-
-
 
 </script>
 

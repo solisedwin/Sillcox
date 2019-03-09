@@ -119,6 +119,7 @@ else{
 
 
 <?php
+
 if(strpos($fullUrl, 'error=login_err')){
 	echo "<text class = 'error'> Login Error ! Input isnt correct </text>";
 }
