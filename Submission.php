@@ -17,9 +17,10 @@ Purpose:
 */
 class Submission {
 	
+
 	function __construct() {
 
-		$this->connect('localhost','root','xxxxx','xxxxxxx');
+		$this->connect('localhost','root','xxxx','xxxxx');
 
 	}
 
@@ -69,6 +70,8 @@ class Submission {
 		for($i = 0; $i < count($_FILES['files']['size']); $i++){
 			
 			$fileName = $_FILES['files']['name'][$i];
+			$fileSize = $_FILES['files']['size'][$i];
+
 			$uploadSize += $fileSize;
 		}
 
@@ -84,37 +87,83 @@ class Submission {
 	function extensions(){
 
 		$extensions = array("txt","pdf","img","jpg","docx","doc","tex","png");
-		$invalid_ext = '';
-
+		
 
 		for($i = 0; $i < count($_FILES['files']['name']); $i++){
 
 			$fileName = $_FILES['files']['name'][$i];
 			$ext = pathinfo($fileName, PATHINFO_EXTENSION);
-			echo $ext . '<br>';
+			
 
 			if(in_array($ext, $extensions) == false){
-				echo $fileName  .  ' extension is not in array' . '<br>';
-				$invalid_ext .=  '~' . $fileName;
+	
+				$GLOBALS['invalid_ext'] .=  '~' . $fileName;
+				//delete file because its extension is not supported
+				unlink($_FILES['files']['tmp_name'][$i]);
+
 			}	
 
 		}
-
-		header('location: upload.php?' . $invalid_ext);
-
+		
 	}
 	
 
+	//Saves all files to given subejct directory 
+	function save(){
 
+		
+		// cd (/var/www/html/SillcoxWeb/Notes/)
+
+		$subject = $_POST['subject'];
+		echo 'Subject selected: ' . $subject . '<br>';
+
+
+		$notesDir = __DIR__ . '/Notes/';
+			
+		chdir($notesDir);
+		$subject_notes_dir = getcwd() . '/' . $subject;
+
+		
+		//There isnt a specific directory for this subject
+		if(!file_exists($subject_notes_dir)){
+
+			mkdir($subject_notes_dir);	
+			chdir($subject_notes_dir);
+		}else{
+			chdir($subject_notes_dir);
+		}	
+
+		echo 'Current directory: ' . getcwd();
+
+		echo '<pre>';
+		var_dump($_FILES['files']);
+
+
+		try {
+					
+			for ($i=0; $i < count($_FILES['files']['size']); $i++)	 { 
+				move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($_FILES['files']['name'][$i]));
+			}
+
+
+				} catch (Exception $e) {
+					echo '~~ Error! File couldnt be uploaded. Reason: ' . $e->getMessage();
+				}		
 	}
 
 
 
+	}//end of class 
+
+
+$invalid_ext = '';
 
 $sub = new Submission();
 $sub->credentials();
+$sub->save();
 
 
+//header('location: upload.php?' . $GLOBALS['invalid_ext']);
 
 
 

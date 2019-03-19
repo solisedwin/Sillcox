@@ -189,7 +189,7 @@ $signup_obj = new SignUp();
 $signup_obj->connect('localhost','root','xxxxx','xxxxx');
 $signup_obj->canRegister();
 $signup_obj->insert_new_user();
-
+	
 $_SESSION['authenticated'] = True;
 $_SESSION['username'] = $_SESSION['su_username'];
 $_SESSION['password'] = $_SESSION['su_password'];

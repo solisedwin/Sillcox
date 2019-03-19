@@ -13,7 +13,7 @@ session_start();
 			$_SESSION['username'] = $_POST['SignIn_Username'];
 			$_SESSION['password'] = $_POST['SignIn_Password'];
 			
-			$this->connect('localhost','root','xxxxxx','xxxxxx');
+			$this->connect('localhost','root','xxxxx','xxxxxx');
 
 		}
 

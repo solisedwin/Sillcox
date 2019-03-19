@@ -84,23 +84,23 @@ if(!($_SESSION['authenticated'])){
 				
 				<b>	<label  style="font-size: 19px; ">Courses</label> </b>
 
-					<select name="select_course" 	style="width: 200px; height: 31px;">
-						<option value="precalc">Pre Calculus</option>
-						<option value="calcI">Calculus I</option>
-						<option value="calcII">Calculus II</option>
-						<option value="calcIII">Calculus III</option>
-						<option value="calcIV">Calculus IV</option>
-						<option value="stat">Probability and Statistics</option>
-						<option value="dm">Discrete Mathematics</option>
-						<option value="mb">Micro Biology</option>					
-						<option value="apI">Anatomy and Physiology I.</option>
-						<option value="phyI">Physics I</option>	
-						<option value="phyII">Physics II</option>	
-						<option value="chemI">Chemistry I</option>
-						<option value="chemII">Chemistry II</option>			
-						<option value="cseI">Computer Science I</option>
-						<option value="macroEco">Macro Economics</option>
-						<option value="microEco">Micro Economics</option>
+					<select name="subject" 	style="width: 200px; height: 31px;">
+						<option value="Precalc">Pre Calculus</option>
+						<option value="CalcI">Calculus I</option>
+						<option value="CalcII">Calculus II</option>
+						<option value="CalcIII">Calculus III</option>
+						<option value="CalcIV">Calculus IV</option>
+						<option value="Stat">Probability and Statistics</option>
+						<option value="Discrete_Math">Discrete Mathematics</option>
+						<option value="Micro_Bio">Micro Biology</option>					
+						<option value="Anatomy_Phy_I">Anatomy and Physiology I</option>
+						<option value="PhyI">Physics I</option>	
+						<option value="PhyII">Physics II</option>	
+						<option value="ChemI">Chemistry I</option>
+						<option value="ChemII">Chemistry II</option>			
+						<option value="CseI">Computer Science I</option>
+						<option value="MacroEco">Macro Economics</option>
+						<option value="MicroEco">Micro Economics</option>
 					</select>
 
 					<br>
@@ -189,7 +189,6 @@ if(!($_SESSION['authenticated'])){
 
 
 		}
-
 
 
 
