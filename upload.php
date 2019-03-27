@@ -10,6 +10,9 @@ if(!($_SESSION['authenticated'])){
 	header('location: index.php');
 }
 
+unset($_SESSION['emailTo']);
+unset($_SESSION['subject']);
+
 
 ?>
 
@@ -189,16 +192,6 @@ if(!($_SESSION['authenticated'])){
 
 
 		}
-
-
-
-
-
-
-
-
-
-
 
 
 		?>

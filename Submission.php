@@ -20,7 +20,7 @@ class Submission {
 
 	function __construct() {
 
-		$this->connect('localhost','root','xxxx','xxxxx');
+		$this->connect('localhost','root','xxxxxxxx','xxxxxxxx');
 
 	}
 
@@ -30,8 +30,8 @@ class Submission {
 	}
 
 
-	function query($username_query){
-		return mysqli_query($this->conn, $username_query);
+	function query($_query){
+		return mysqli_query($this->conn, $_query);
 	}
 
 
@@ -115,6 +115,8 @@ class Submission {
 		// cd (/var/www/html/SillcoxWeb/Notes/)
 
 		$subject = $_POST['subject'];
+		$_SESSION['subject'] = $subject;
+
 		echo 'Subject selected: ' . $subject . '<br>';
 
 
@@ -153,6 +155,49 @@ class Submission {
 
 
 
+	function email(){
+
+		//Know who is submitting these files 
+		$this->users_email();
+
+		$subject_admin_file = file_get_contents('/var/www/html/SillcoxWeb/subjectAdmin.txt');
+
+		if(strpos($subject_admin_file, $_SESSION['subject']) == false){
+			
+			$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
+		
+		}else{ 
+			//There is an admin for this subject
+
+			$subject_index	= strpos($subject_admin_file, '=');
+			//Gets rest of the line, which is the admin email for who is in charge of reviewing notes for this course. 
+			$adminEmail = substr($subject_admin_file,$subject_index + 1);
+
+
+			$_SESSION['emailTo'] = $adminEmail;
+		}
+
+		include_once('Email.php');
+
+	}
+
+
+
+	function users_email(){
+
+		$username = $_SESSION['username'];
+
+		$users_email_query = "SELECT Email FROM Info WHERE Username = '$username' ";
+		$result = $this->query($users_email_query);
+		$rows = $result->fetch_assoc();
+		$_SESSION['user_email'] = $rows['Email'];
+
+	}
+
+
+ 
+
+
 	}//end of class 
 
 
@@ -161,9 +206,9 @@ $invalid_ext = '';
 $sub = new Submission();
 $sub->credentials();
 $sub->save();
+$sub->email();
 
-
-//header('location: upload.php?' . $GLOBALS['invalid_ext']);
+header('location: upload.php?' . $GLOBALS['invalid_ext']);
 
 
 

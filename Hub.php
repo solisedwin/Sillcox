@@ -18,7 +18,6 @@ if(!($_SESSION['authenticated'])){
 <body>
 
 
-
 <header>
 
 <img src="Images/logo.png">
@@ -32,21 +31,10 @@ if(!($_SESSION['authenticated'])){
 		<p>Log Out</p>
 	</div>
 
-	<?php
-
-	if($_SESSION['admin'] == 1){
-
-		echo "
-
+	
 		<span id = 'upload_span'>
-		<p  style = 'font-size: 25px; cursor: pointer;' onclick='uploadNotes()'	> Upload Notes </p> </span>
-
-		";
-
-	}
-
-
-	?>
+		<p  style = 'font-size: 25px; cursor: pointer;' onclick='uploadNotes()'	> Upload Notes </p> 
+		</span>
 
 
 </header>
@@ -57,16 +45,97 @@ if(!($_SESSION['authenticated'])){
 
 <center>
 	<div id = 'notes_div'>
-	<span><h2>Available notes </h2>	</span>
+	
+	<b>	
+	<label  style="font-size: 19px; ">Courses</label> </b>
+
+				<select name="subject" 	style="width: 200px; height: 31px;">
+					<option value="Precalc">Pre Calculus</option>
+					<option value="CalcI">Calculus I</option>
+					<option value="CalcII">Calculus II</option>
+					<option value="CalcIII">Calculus III</option>
+					<option value="CalcIV">Calculus IV</option>
+					<option value="Stat">Probability and Statistics</option>
+					<option value="Discrete_Math">Discrete Mathematics</option>
+					<option value="Micro_Bio">Micro Biology</option>					
+					<option value="Anatomy_Phy_I">Anatomy and Physiology I</option>
+					<option value="PhyI">Physics I</option>	
+					<option value="PhyII">Physics II</option>	
+					<option value="ChemI">Chemistry I</option>
+					<option value="ChemII">Chemistry II</option>			
+					<option value="CseI">Computer Science I</option>
+					<option value="MacroEco">Macro Economics</option>
+					<option value="MicroEco">Micro Economics</option>
+				</select>
+
+				<br>
+						
+
+		</div>
+	</center>
 
 
 
-	</div>
-</center>
+
+<footer>
+	
+	
+	<center>
+		<h3 >Have comments, questions, or concerns about the website? Email us your 
+		feedback </h3>
 
 
 
 
+	<form action="Feedback.php" method="POST">
+		
+	<textarea rows="9" cols="60" name="feedback_msg">
+		
+
+	</textarea>
+
+
+	<input type="Submit" name="Submit" value="Submit Feedback">
+
+
+	</form>
+
+
+<?php
+
+
+	$error = $_SERVER['QUERY_STRING'];	
+	$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
+
+	if(strpos($fullUrl, 'error=empty_feedback')){
+		echo "<text class = 'error'> You didnt write anything as feedback ! </text>	";
+	}else if(strpos($fullUrl, 'feedback=sent')){
+		echo "<text class = 'error'> Feedback has been sent ! </text>";
+
+		unset($_SESSION['feedback']);
+		unset($_SESSION['emailTo']);
+
+
+	}else{
+
+	}
+
+
+?>
+
+
+
+
+
+
+	</center>
+
+
+
+
+
+
+</footer>
 
 
 
@@ -84,7 +153,6 @@ function logOut(){
 function uploadNotes(){
 	window.location.href = 'upload.php';
 }
-
 
 
 

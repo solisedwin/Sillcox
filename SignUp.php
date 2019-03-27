@@ -78,28 +78,28 @@ class SignUp {
 	
 	function usernameTaken(){
 
-	$username = $_SESSION['su_username'];
+		$username = $_SESSION['su_username'];
+			
+		if(strlen($username) < 4){
+			header('location: index.php?error=short_user');
+			die();
+		} if(strlen($username) > 20){
+			header('location: index.php?error=long_user');
+			die();
+		}
+
 		
-	if(strlen($username) < 4){
-		header('location: index.php?error=short_user');
-		die();
-	} if(strlen($username) > 20){
-		header('location: index.php?error=long_user');
-		die();
-	}
+		$username_query = "SELECT * FROM Info Where Username = '$username';";	
+		$result = $this->query($username_query);
+		echo '<br>Query: ' . $username_query;
+		
+		if($result->num_rows  > 0){
+			header('location: index.php?error=username');
+			die();
 
-	
-	$username_query = "SELECT * FROM Info Where Username = '$username';";	
-	$result = $this->query($username_query);
-	echo '<br>Query: ' . $username_query;
-	
-	if($result->num_rows  > 0){
-		header('location: index.php?error=username');
-		die();
+		}
 
-	}
-
-}		
+	}		
 
 
 	
@@ -186,7 +186,7 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxx','xxxxx');
+$signup_obj->connect('localhost','root','xxxxxxxx','xxxxxx');
 $signup_obj->canRegister();
 $signup_obj->insert_new_user();
 	
