@@ -4,7 +4,6 @@
 session_start();
 
 
-
 /**
 Purpose: 
 
@@ -20,7 +19,7 @@ class Submission {
 
 	function __construct() {
 
-		$this->connect('localhost','root','xxxxxxxx','xxxxxxxx');
+		$this->connect('localhost','root','xxxxxx','xxxxxx');
 
 	}
 
@@ -110,7 +109,6 @@ class Submission {
 
 	//Saves all files to given subejct directory 
 	function save(){
-
 		
 		// cd (/var/www/html/SillcoxWeb/Notes/)
 
@@ -146,7 +144,6 @@ class Submission {
 			for ($i=0; $i < count($_FILES['files']['size']); $i++)	 { 
 				move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($_FILES['files']['name'][$i]));
 			}
-
 
 				} catch (Exception $e) {
 					echo '~~ Error! File couldnt be uploaded. Reason: ' . $e->getMessage();

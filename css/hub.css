@@ -21,8 +21,7 @@ body {
 .error { 
 
 	color: red;
-	font-size: 18px;
-	
+	font-size: 20px;
  }
 
 
@@ -131,7 +130,21 @@ input[type=search]{
 }
 
 
+#view_btn {
 
+	width: 200px;
+	height: 40px;
+	border-style: solid;
+	border-color: black;
+
+	background-color: #9eacc1;
+
+	font-size: 20px;
+	color: black;
+
+
+
+}
 
 
 
@@ -193,8 +206,6 @@ footer{
 footer textarea {
 
 	font-family: "Times New Roman", Times, serif;
-
-
 
 }
 

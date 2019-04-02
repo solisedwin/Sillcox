@@ -30,7 +30,9 @@ class SignUp {
 
 
 	function query($username_query){
-		return mysqli_query($this->conn, $username_query);
+
+		$sql_query = mysqli_real_escape_string($username_query);
+		return mysqli_query($this->conn, $sql_query);
 	}
 
 
@@ -186,7 +188,7 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxxxxx','xxxxxx');
+$signup_obj->connect('localhost','root','xxxxx','xxxxx');
 $signup_obj->canRegister();
 $signup_obj->insert_new_user();
 	

@@ -40,16 +40,14 @@ if(!($_SESSION['authenticated'])){
 </header>
 
 
-
-
-
 <center>
 	<div id = 'notes_div'>
 	
-	<b>	
-	<label  style="font-size: 19px; ">Courses</label> </b>
+	<h2>Search Notes for Subject</h2>
 
-				<select name="subject" 	style="width: 200px; height: 31px;">
+	<form method="GET" action="Notes.php">
+
+				<select name="view_subject" style="width: 400px; height: 31px;">
 					<option value="Precalc">Pre Calculus</option>
 					<option value="CalcI">Calculus I</option>
 					<option value="CalcII">Calculus II</option>
@@ -69,10 +67,43 @@ if(!($_SESSION['authenticated'])){
 				</select>
 
 				<br>
-						
 
+				<input type="Submit" id = 'view_btn' name="Submit" value="View Notes">
+
+			</form>
+
+					
 		</div>
+
+
+			<?php
+
+				$error = $_SERVER['QUERY_STRING'];	
+				$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
+
+				if(strpos($fullUrl, 'error=empty_feedback')){
+					echo "<text class = 'error'> Error. Feedback message is empty </text>	";
+				}else if(strpos($fullUrl, 'feedback=sent')){
+					echo "<text class = 'error'> Feedback has been sent ! </text>";
+
+					unset($_SESSION['feedback']);
+					unset($_SESSION['emailTo']);
+
+
+				}else if (strpos($fullUrl, 'error=no_dir')) {
+
+					echo "<text class = 'error'> Sorry ! There arent any notes for that subject yet . </text>";
+
+
+				}
+
+
+			?>
+
+
 	</center>
+
+
 
 
 
@@ -92,7 +123,7 @@ if(!($_SESSION['authenticated'])){
 	<textarea rows="9" cols="60" name="feedback_msg">
 		
 
-	</textarea>
+	</textarea> 
 
 
 	<input type="Submit" name="Submit" value="Submit Feedback">
@@ -100,28 +131,6 @@ if(!($_SESSION['authenticated'])){
 
 	</form>
 
-
-<?php
-
-
-	$error = $_SERVER['QUERY_STRING'];	
-	$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
-
-	if(strpos($fullUrl, 'error=empty_feedback')){
-		echo "<text class = 'error'> You didnt write anything as feedback ! </text>	";
-	}else if(strpos($fullUrl, 'feedback=sent')){
-		echo "<text class = 'error'> Feedback has been sent ! </text>";
-
-		unset($_SESSION['feedback']);
-		unset($_SESSION['emailTo']);
-
-
-	}else{
-
-	}
-
-
-?>
 
 
 

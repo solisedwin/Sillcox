@@ -35,8 +35,9 @@ session_start();
 	function send_feedback(){
 
 
-		if (!strlen(trim($_POST['feedback_msg']))){
+		if (!strlen(trim($_POST['feedback_msg'])) || empty(trim($_POST['feedback_msg']))){
 			header('location: Hub.php?error=empty_feedback');
+			die();
 		}
 
 		$_SESSION['feedback'] =  $_POST['feedback_msg'];
