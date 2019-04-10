@@ -23,6 +23,16 @@ body {
 
 }
 
+.good {
+
+	color: green;
+	font-size: 18px;
+	position: relative;
+
+
+}
+
+
 header {
 
 	background-color: #3a3e44;

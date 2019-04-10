@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html>
-
 <?php
-
 session_start();
-
 
 if(!($_SESSION['authenticated'])){
 	header('location: index.php');
@@ -13,8 +8,9 @@ if(!($_SESSION['authenticated'])){
 unset($_SESSION['emailTo']);
 unset($_SESSION['subject']);
 
-
 ?>
+<!DOCTYPE html>
+<html>
 
 <head>
 	<title>Upload Notes</title>
@@ -40,17 +36,14 @@ unset($_SESSION['subject']);
 		Hello " .  $_SESSION['username'];
 		'</p>';
 
-
 		?>
-
-
-		<div class="header_btn" onclick="redirect_btn('home')">
-		Home Page	
-		</div>
 
 		<div class = 'header_btn' onclick="redirect_btn('out')">
 		Log Out
+		</div>
 
+		<div class="header_btn" onclick="redirect_btn('home')">
+		Home Page	
 		</div>
 
 	</header>
@@ -163,9 +156,16 @@ unset($_SESSION['subject']);
 		$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
 
 		if(strpos($fullUrl, 'error=empty')){
-		echo "<text class = 'error'> Error ! You didnt upload any files.  </text>";
-		}else if (strpos($fullUrl, 'error=size')){
-		echo "<text class = 'error'> Error ! File size is too large! Try to upload smaller files or one at a time. </text>";
+			echo "<text class = 'error'> Error ! You didnt upload any files.  </text>";
+		}
+		else if (strpos($fullUrl, 'upload=sent')){
+			echo "<text class = 'good'> File has been sent for review. Thank you for your contribution. </text>";
+			//Erase valid files that were previously uploaded. 
+			unset($_SESSION['new_files']);
+		}
+
+		else if (strpos($fullUrl, 'error=size')){
+			echo "<text class = 'error'> Error ! File size is too large! Try to upload smaller files or one at a time. </text>";
 		}else if (strpos($fullUrl, '~')) {
 			$invalid_ext_string = substr($fullUrl, strpos($fullUrl,'~') + 1);
 			$invalid_extensions = explode('~', $invalid_ext_string);	
@@ -188,11 +188,12 @@ unset($_SESSION['subject']);
 			echo '<br>';
 			echo "<text class = 'error'> Please view list of valid extensions to upload files above. </text>";
 
+			}
+
+
+		}else{
+
 		}
-
-
-		}
-
 
 		?>
 
@@ -200,12 +201,6 @@ unset($_SESSION['subject']);
 
 
 	</center>
-
-
-
-
-
-
 
 
 
@@ -247,11 +242,6 @@ unset($_SESSION['subject']);
 	}
 
 </script>
-
-
-
-
-
 
 
 

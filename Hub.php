@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 session_start();
 
@@ -7,8 +6,8 @@ if(!($_SESSION['authenticated'])){
 	header('location: index.php');
 }
 
-
 ?>
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -16,6 +15,11 @@ if(!($_SESSION['authenticated'])){
 	<link rel="stylesheet" type="text/css" href="css/hub.css">
 </head>
 <body>
+
+	
+
+
+</div>
 
 
 <header>
@@ -27,9 +31,13 @@ if(!($_SESSION['authenticated'])){
 		<img src="Images/search.png" id = 'search_icon'	style="cursor: pointer;" >
 	</span>
 
-	<div id = 'logOut_div' onclick="logOut()" style = "cursor: pointer; ">
-		<p>Log Out</p>
-	</div>
+		<div id = 'logOut_div' onclick="logOut()" style = "cursor: pointer; ">
+			<p>Log Out</p>
+		</div>
+
+		<div id = 'logOut_div' onclick="settings()" style = "cursor: pointer; ">
+			<p>Settings</p>
+		</div>
 
 	
 		<span id = 'upload_span'>
@@ -91,10 +99,7 @@ if(!($_SESSION['authenticated'])){
 
 
 				}else if (strpos($fullUrl, 'error=no_dir')) {
-
 					echo "<text class = 'error'> Sorry ! There arent any notes for that subject yet . </text>";
-
-
 				}
 
 
@@ -161,6 +166,12 @@ function logOut(){
 
 function uploadNotes(){
 	window.location.href = 'upload.php';
+}
+
+
+function settings(){
+	window.location.href = 'Settings.php';
+
 }
 
 

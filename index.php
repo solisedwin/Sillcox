@@ -2,7 +2,6 @@
 
 <?php
 
-
 	session_start();
 	$_SESSION['authenticated'] = False;
 
@@ -81,7 +80,14 @@ if(strpos($fullUrl, 'error=scholars')){
 	echo "<text class = 'error'> Email is already taken !! Account already made !! </text>	";
 }else if (strpos($fullUrl, 'stat=logout')) {
 	session_destroy();
+}else if (strpos($fullUrl, 'stat=delete_account')) {
+	
+	//We just delete an account 
+	session_unset();
+	session_destroy();
+
 }
+
 else{
 
 }
@@ -132,9 +138,10 @@ if(strpos($fullUrl, 'error=login_err')){
 <form action="SignIn.php" method="POST">
 	
 	<input type="text" name="SignIn_Username" placeholder="Enter username" required="true">
-
 	<input type="password" name="SignIn_Password" placeholder="Enter password" required="true">
-
+	<!-- 
+	<p  id = 'signIn_show'>Show</p>
+-->
 	<input type="submit" name="Submit">
 
 </form>
@@ -182,11 +189,6 @@ function facebook_group(){
 
 }
 
-
-
-
-
-
 function show_signIn(){
 	var signUp_div = document.getElementById('signUp_div');
 	signUp_div.style.display = 'none';
@@ -210,13 +212,6 @@ function show_signUp() {
 
 
 </script>
-
-
-
-
-
-
-
 
 
 </body>

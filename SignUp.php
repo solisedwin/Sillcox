@@ -20,7 +20,6 @@ class SignUp {
 		$_SESSION['su_password'] =  $_POST['SignUp_Password'];
 		$_SESSION['su_password_again'] = $_POST['SignUp_Password_again'];
 
-
 	}
 
 	//closes mysql conneciton
@@ -31,7 +30,7 @@ class SignUp {
 
 	function query($username_query){
 
-		$sql_query = mysqli_real_escape_string($username_query);
+		$sql_query = mysqli_real_escape_string($conn, $username_query);
 		return mysqli_query($this->conn, $sql_query);
 	}
 
@@ -188,7 +187,7 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxx','xxxxx');
+$signup_obj->connect('localhost','root','xxxxx','xxxxxx');
 $signup_obj->canRegister();
 $signup_obj->insert_new_user();
 	
@@ -196,10 +195,10 @@ $_SESSION['authenticated'] = True;
 $_SESSION['username'] = $_SESSION['su_username'];
 $_SESSION['password'] = $_SESSION['su_password'];
 			
+header('location: Hub.php');	
 
 $this->closeConnection();
 
-header('location: Hub.php');
 
 
 ?>

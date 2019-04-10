@@ -9,7 +9,7 @@ session_start();
 
 		function __construct(){
 			
-			$this->connect('localhost','root','xxxxxxx','xxxxxxx');
+			$this->connect('localhost','root','xxxxx','xxxxx');
 		}
 
 		function closeConnection(){

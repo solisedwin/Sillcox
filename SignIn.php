@@ -13,7 +13,7 @@ session_start();
 			$_SESSION['username'] = $_POST['SignIn_Username'];
 			$_SESSION['password'] = $_POST['SignIn_Password'];
 			
-			$this->connect('localhost','root','xxxxxxx','xxxxxx');
+			$this->connect('localhost','root','xxxxxx','xxxxxx');
 
 		}
 
@@ -40,7 +40,6 @@ session_start();
 		function isAdmin($user){
 
 			$adminQuery = "SELECT Admin FROM Info Where Username = '$user'";
-
 			echo '  ' . $adminQuery;
 
 			$result = $this->query($adminQuery);

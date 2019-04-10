@@ -1,8 +1,5 @@
 <?php
-
-
 session_start();
-
 
 /**
 Purpose: 
@@ -19,7 +16,7 @@ class Submission {
 
 	function __construct() {
 
-		$this->connect('localhost','root','xxxxxx','xxxxxx');
+		$this->connect('localhost','root','xxxxxx','xxxxx');
 
 	}
 
@@ -51,7 +48,7 @@ class Submission {
 
 		$this->isEmpty();
 		$this->fileSize();
-		$this->extensions();
+		//$this->extensions();
 	}
 
 
@@ -85,7 +82,7 @@ class Submission {
 
 	function extensions(){
 
-		$extensions = array("txt","pdf","img","jpg","docx","doc","tex","png");
+		$extensions = array("pdf","img","jpg","docx","doc","png");
 		
 
 		for($i = 0; $i < count($_FILES['files']['name']); $i++){
@@ -95,10 +92,11 @@ class Submission {
 			
 
 			if(in_array($ext, $extensions) == false){
-	
 				$GLOBALS['invalid_ext'] .=  '~' . $fileName;
+			
 				//delete file because its extension is not supported
 				unlink($_FILES['files']['tmp_name'][$i]);
+
 
 			}	
 
@@ -133,18 +131,33 @@ class Submission {
 			chdir($subject_notes_dir);
 		}	
 
-		echo 'Current directory: ' . getcwd();
-
-		echo '<pre>';
-		var_dump($_FILES['files']);
-
 
 		try {
+
+			$new_files_array = [];
+			$extensions = array("txt","pdf","img","jpg","docx","doc","png");
+		
 					
 			for ($i=0; $i < count($_FILES['files']['size']); $i++)	 { 
-				move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($_FILES['files']['name'][$i]));
+
+				//Get extension
+				$fileName = $_FILES['files']['name'][$i];
+				$ext = pathinfo($fileName, PATHINFO_EXTENSION);
+
+				if(in_array($ext, $extensions)){
+
+					array_push($new_files_array, $_FILES['files']['name'][$i]);
+					move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($_FILES['files']['name'][$i]));
+	
+				}else{
+					$GLOBALS['invalid_ext'] .=  '~' . $fileName;
+				}	
+
 			}
 
+				$_SESSION['new_files'] = $new_files_array;
+
+			
 				} catch (Exception $e) {
 					echo '~~ Error! File couldnt be uploaded. Reason: ' . $e->getMessage();
 				}		
@@ -153,6 +166,7 @@ class Submission {
 
 
 	function email(){
+
 
 		//Know who is submitting these files 
 		$this->users_email();
@@ -169,7 +183,6 @@ class Submission {
 			$subject_index	= strpos($subject_admin_file, '=');
 			//Gets rest of the line, which is the admin email for who is in charge of reviewing notes for this course. 
 			$adminEmail = substr($subject_admin_file,$subject_index + 1);
-
 
 			$_SESSION['emailTo'] = $adminEmail;
 		}
@@ -193,9 +206,8 @@ class Submission {
 
 
  
-
-
 	}//end of class 
+
 
 
 $invalid_ext = '';
@@ -205,9 +217,14 @@ $sub->credentials();
 $sub->save();
 $sub->email();
 
-header('location: upload.php?' . $GLOBALS['invalid_ext']);
 
 
+//All files uploaded were valid. Passsed credentials. 
+if(empty($invalid_ext)){
+	header('location: upload.php?upload=sent');
+}else{
+	header('location: upload.php?~' . $GLOBALS['invalid_ext']);
+}
 
 
 ?>

@@ -41,48 +41,41 @@ class Notes {
     			$extension = pathinfo($files[$i], PATHINFO_EXTENSION);
     			$src = 'Notes/' . $_GET['view_subject'] . '/' . $files[$i];
 
+
     			echo '<center>';
 
-    			//array("txt","pdf","img","jpg","docx","doc","tex","png");
+    			//array("txt","pdf","img","jpg","docx","doc","png");
     			switch ($extension) {
     				case ($extension == 'png' || $extension == 'img' || $extension == 'jpg'):
-						echo "<img src= '$src' style='width:100px;height:100px;'> <br>";
+
+						echo "<img src= '$src' style='width:500px;height:520px;'> ";
     					continue;
 
-    				case 'txt':
-    					$textFile = file_get_contents($files[$i]);
-    					echo $textFile;
-    					continue;
-    
+
+                    case 'doc':
+                        $doc_src = "Notes/Precalc/" . $files[$i];
+
+
+                        echo "<iframe align = 'center' height = '75%' width = '75%'src = " . $doc_src. ">";
+                        echo '</iframe>';
+                                 
+                        continue;
+
 
     				case 'pdf':
-    					
-    					/*
-						header('Content-type: application/pdf');
-    					header('Content-Disposition: inline; filename="' . $files[$i] . '"');
-						header('Content-Transfer-Encoding: binary');
-						header('Content-Length: ' . filesize($files[$i]));
-						header('Accept-Ranges: bytes');
-    				
-    					readfile($files[$i]);
-    					*/
-
-
     					$pdf_src = "Notes/Precalc/" . $files[$i];
 
-
-    					echo "<iframe align = 'center' height = '75%' width = '75%'src = " .$pdf_src. ">";
+    					echo "<iframe align = 'center' height = '75%' width = '75%'src = " . $pdf_src. ">";
     					echo '</iframe>';
-    					echo "<br> <br>";
-
+    				
     					continue;
 
     				default:
     					continue;
     			
+                    echo "<br> <br>";
     				echo '</center>';
     			}
-
 
 
     		}//end for loop
