@@ -30,8 +30,8 @@ class SignUp {
 
 	function query($username_query){
 
-		$sql_query = mysqli_real_escape_string($conn, $username_query);
-		return mysqli_query($this->conn, $sql_query);
+		//$sql_query = mysqli_real_escape_string($conn, $username_query);
+		return mysqli_query($this->conn, $username_query);
 	}
 
 
@@ -44,7 +44,7 @@ class SignUp {
 			}else{
 				echo '| Connected successfully';
 			}
-	}
+	}	
 	
 
 	function passwordCheck(){
@@ -93,6 +93,10 @@ class SignUp {
 		$username_query = "SELECT * FROM Info Where Username = '$username';";	
 		$result = $this->query($username_query);
 		echo '<br>Query: ' . $username_query;
+
+
+		echo 'Rows: ' . $result->num_rows;
+
 		
 		if($result->num_rows  > 0){
 			header('location: index.php?error=username');
@@ -111,8 +115,8 @@ class SignUp {
 		if(strlen($password) < 4){
 			header('location: index.php?error=short_pd');
 			die();
-
 		}
+
 		if(strlen($password) > 25){
 			header('location: index.php?error=long_pd');
 			die();
@@ -145,9 +149,6 @@ class SignUp {
 			header('location: index.php?error=email_taken');
 			die();
 		}
-
-
-
 	}
 
 
@@ -187,18 +188,23 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxx','xxxxxx');
-$signup_obj->canRegister();
+$signup_obj->connect('localhost','root','xxxxxx','xxxxxx');
+$signup_obj->canRegister();	
+
 $signup_obj->insert_new_user();
 	
 $_SESSION['authenticated'] = True;
 $_SESSION['username'] = $_SESSION['su_username'];
 $_SESSION['password'] = $_SESSION['su_password'];
+
+unset($_SESSION['su_username']);
+unset($_SESSION['su_password']);
+unset($_SESSION['su_password_again']);
+
 			
 header('location: Hub.php');	
 
-$this->closeConnection();
-
+$signup_obj->closeConnection();
 
 
 ?>

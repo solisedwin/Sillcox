@@ -17,7 +17,7 @@
 				$this->output_message('New password and confirm password arent the same!');
 			}
 
-			else if(strpos($url, 'old_pass_incorrect')){
+			else if(strpos($url, 'old_password_incorrect')){
 
 				$this->output_message('Old Password is incorrect! Doesnt match our records.');
 
@@ -43,10 +43,12 @@
 			}else if(strpos($url, 'username_taken')){
 				$this->output_message('Username is already taken. Choose a different name');
 			}else if(strpos($url, 'username_changed')){
-				$this->output_message('Username has been changed!');
+				$this->updated_message('Username has been changed!');
 			}else if(strpos($url, 'password_changed')){
-				$this->output_message('Password has been changed!');
-			}else{
+				$this->updated_message('Password has been changed!');
+			}else if(strpos($url, 'space_char'))
+				$this->output_message('Cant have space characters as part of your input!');
+			else{
 
 			}
 
@@ -65,8 +67,26 @@
 
 			";
 
+		}
+
+
+		function updated_message($msg){
+			echo "
+
+			<p class = 'updated'>
+
+			$msg
+
+			</p>
+
+			";
+
+
+
+
 
 		}
+
 
 
 	}

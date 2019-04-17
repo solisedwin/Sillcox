@@ -4,6 +4,12 @@ session_start();
 
 /**
 * 
+Purpose: 
+
+	- Changes Password
+	- Changes Username 
+	- Deletes Account 
+
 */
 class Update{
 
@@ -42,8 +48,6 @@ class Update{
 
 
 
-
-
 	function password_credentials(){
 
 			$old_password = trim($_POST['old_password']);
@@ -51,39 +55,31 @@ class Update{
 			$confirm_password = trim($_POST['confirm_new_password']);
 
 
-			if($new_password != $confirm_new_password){		
+			if($new_password != $confirm_password){		
 				$this->headerErrors('pass_unequal');
 			}
 
-
 			$this->validPassword($new_password);
-			/*
-			$sql_pass = $this->sql_password();
-
-			if($old_password != $sql_pass){
-				$this->headerErrors('sql_pass_unequal');
-			}*/
-
-			$this->old_password_correct($old_password, $new_password);
+			$this->old_password_correct($old_password);
 
 
 			//We pass the marks of checking is new password is valid & old password is correct. We can now change user's password
 			$this->change_password($new_password);	
-
-		
 	}
+
 
 	function change_password($new_password){
 
-		require('Encryption.php');	
+		require_once('Encryption.php');	
 	
 		$hashingObject = new Encryption();
 		$hash = $hashingObject->encrypt($new_password);
 
-		$username = $_SESSION['username'];
+		$email = $_SESSION['email'];
 
-		$sql_password_query = "UPDATE Info Set Password = '$hash' WHERE Username = '$username' ";
+		$sql_password_query = "UPDATE Info Set Password = '$hash' WHERE Email = '$email' ";
 		$this->query($sql_password_query);
+
 		header('location: Settings.php?status=password_changed');
 		die();
 
@@ -91,37 +87,46 @@ class Update{
 
 
 
+	function users_email(){
+
+		$username = $_SESSION['username'];
+
+		$users_email_query = "SELECT Email FROM Info WHERE Username = '$username' ";
+		$result = $this->query($users_email_query);
+		$rows = $result->fetch_assoc();
+		$_SESSION['email'] = $rows['Email'];
+		
+		return $_SESSION['email'];
+	}
 
 
 
-
-	function old_password_correct($old_password, $newPassword){
+	function old_password_correct($old_password){
 			$sql_encrypt_password =  $this->sql_password();
 
-			require('Encryption.php');
+			require_once('Encryption.php');
 			$obj = new Encryption();
-			
+				
 			$is_valid_password = $obj->verify($old_password, $sql_encrypt_password);
 			
-			if($is_valid_password == False){
+			if(!$is_valid_password){
 				$this->headerErrors('old_password_incorrect');
-				
 			}
-		
-	}
+		}
 
 
 
 	function sql_password(){
 
-		$user = $_SESSION['username'];
-		$sql__query = "SELECT Password FROM Info WHERE Username = '$user' ";
+		$email = $this->users_email();
+
+		$sql_encrypt_query = "SELECT Password FROM Info WHERE Email = '$email'";
 		$result = $this->query($sql_encrypt_query);
 
 		$row = $result->fetch_assoc(); 
-		$sql__password =  $row['Password'];
+		$sql_password =  $row['Password'];
 
-		return $sql__password;
+		return $sql_password;
 
 	}
 
@@ -145,8 +150,10 @@ class Update{
 		} 
 		if(!preg_match('@[A-Z]@', $password)){
 			$this->headerErrors('no_upper');
-			
 		}
+		if(strpos($password, ' ')){
+			$this->headerErrors('space_char');
+		}	
 
 	}
 
@@ -160,8 +167,8 @@ class Update{
 			$this->headerErrors('delete_account');
 		}
 
-		$username = $_SESSION['username'];
-		$delete_query = "Delete FROM Info WHERE Username = '$username'";
+		$email = $_SESSION['su_email'];
+		$delete_query = "Delete FROM Info WHERE Email = '$email'";
 
 		$this->query($delete_query);
 		header('location: index.php?stat=delete_account');
@@ -183,10 +190,13 @@ class Update{
 		}
 
 
+		//Check to see if username has valid credentials
 		if(strlen($new_username) < 4){
 			$this->headerErrors('username_short');
 		} if(strlen($new_username) > 20){
 			$this->headerErrors('username_long');
+		}if(strpos($new_username, ' ')){
+			$this->headerErrors('space_char');
 		}
 
 
@@ -194,9 +204,9 @@ class Update{
 		$this->user_already_exists($new_username);
 
 		//Change username
-		$user = $_SESSION['username'];
+		$email  = $_SESSION['su_email'];
 
-		$sql_change_username = "UPDATE Info Set Username = '$new_username' WHERE Username = '$user';";
+		$sql_change_username = "UPDATE Info Set Username = '$new_username' WHERE Email = '$email';";
 		$this->query($sql_change_username);
 
 		// ** Change session variable so it displays in website **
@@ -204,7 +214,6 @@ class Update{
 
 		header('location: Settings.php?status=username_changed');
 		die();
-
 
 
 	}
@@ -217,7 +226,7 @@ class Update{
 		$user_exits_query = "SELECT * FROM Info WHERE Username = '$new_username' ";	
 	 	$results = $this->query($user_exits_query);
 
-	 	if(mysqli_num_rows($results) > 1){
+	 	if($results->num_of_rows > 0){
 	 		$this->headerErrors('username_taken');
 	 	}
 	}
@@ -248,23 +257,12 @@ class Update{
 
 
 
-
 }//class ends
-
-
-
 
 
 
 $update = new Update();
 $update->main();
-
-
-
-
-
-
-
 
 
 

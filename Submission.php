@@ -16,7 +16,7 @@ class Submission {
 
 	function __construct() {
 
-		$this->connect('localhost','root','xxxxxx','xxxxx');
+		$this->connect('localhost','root','xxxxx','xxxxxx');
 
 	}
 
@@ -48,7 +48,7 @@ class Submission {
 
 		$this->isEmpty();
 		$this->fileSize();
-		//$this->extensions();
+		$this->extensions();
 	}
 
 
@@ -200,7 +200,7 @@ class Submission {
 		$users_email_query = "SELECT Email FROM Info WHERE Username = '$username' ";
 		$result = $this->query($users_email_query);
 		$rows = $result->fetch_assoc();
-		$_SESSION['user_email'] = $rows['Email'];
+		$_SESSION['email'] = $rows['Email'];
 
 	}
 
