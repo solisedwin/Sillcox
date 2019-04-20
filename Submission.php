@@ -15,9 +15,7 @@ class Submission {
 	
 
 	function __construct() {
-
-		$this->connect('localhost','root','xxxxx','xxxxxx');
-
+		$this->connect('localhost','root','xxxxxx','xxxxx');
 	}
 
 	//closes mysql conneciton
@@ -54,10 +52,17 @@ class Submission {
 
 	function isEmpty(){
 
-		if (!isset($_FILES['files']) || empty($_FILES['files'])) {
+		if (!isset($_FILES['files']) || empty($_FILES['files']) || is_null($_FILES['files'])) {
 			header('location: upload.php?error=empty');
 			die();
 		}
+
+
+		if(!isset($_POST['topic']) || empty($_POST['topic']) || strlen(trim($_POST['topic'])) == 0 ){
+			header('location: upload.php?error=topic_err');
+			die();
+		}
+
 	}
 
 	function fileSize(){
@@ -97,45 +102,131 @@ class Submission {
 				//delete file because its extension is not supported
 				unlink($_FILES['files']['tmp_name'][$i]);
 
-
 			}	
 
 		}
 		
 	}
+
+
+
+
+	function topic_directory_check($subject){
+
+		//check if topic dir name already exists, if so. Just append a number to it.
+
+		//all directories within the subject folder 
+		$dirs = glob("*", GLOB_ONLYDIR);
+
+		$count_dir = 0;
+
+		for($i = 0; $i < count($dirs); $i++){
+			if($dirs[$i] == $subject){
+				$count_dir += 1; 
+			}
+		}
+
+
+		//Mutiple dirs with the same name
+		if($count_dir != 0){
+			return $subject . '(' . $count_dir . ')';
+		}
+		//No sub dir with that same topic name
+		else{
+			return $subject;
+		}
+
+	}
+
+
+
+
+	function set_session_variables(){
+
+
+		//Subject was written down because it wasnt offered in notes
+		if(isset($_POST['specific_subject']) && !empty($_POST['specific_subject'])){
+
+			$subject = trim($_POST['specific_subject']);
+			$_SESSION['subject'] = $subject;
+
+		}else{
+			
+			$subject = trim($_POST['subject']);
+			$_SESSION['subject'] = $subject;
+		}
+
+
+		//There is message that needs to be sent to admin. Written from uploader
+		if(isset($_POST['msg']) && !empty($_POST['msg'])){
+			$_SESSION['msg'] = $_POST['msg'];
+		}
+	
+		
+	}
+
+
 	
 
 	//Saves all files to given subejct directory 
 	function save(){
-		
+
 		// cd (/var/www/html/SillcoxWeb/Notes/)
 
-		$subject = $_POST['subject'];
-		$_SESSION['subject'] = $subject;
+		$this->set_session_variables();
 
-		echo 'Subject selected: ' . $subject . '<br>';
+		
+		$topic = trim($_POST['topic']);
+		$_SESSION['topic'] = $topic;
 
+		$subject = $_SESSION['subject'];
 
 		$notesDir = __DIR__ . '/Notes/';
-			
+
+
 		chdir($notesDir);
 		$subject_notes_dir = getcwd() . '/' . $subject;
 
 		
+		
 		//There isnt a specific directory for this subject
 		if(!file_exists($subject_notes_dir)){
+			//Make subject directory, change to subject directory 
 
 			mkdir($subject_notes_dir);	
 			chdir($subject_notes_dir);
-		}else{
+
+			//Make directory for topic, change to topic directory
+			
+			$topic_dir = getcwd() . '/' . $topic;
+
+
+			mkdir($topic_dir);
+			chdir($topic_dir);
+
+	
+		}
+		//There is already a directory with this specific subject
+		else{
 			chdir($subject_notes_dir);
+		
+			//check to see if there is already a topic folder with the same name.
+			$topic_folder_name = $this->topic_directory_check($topic);
+			//Make and change to topic dir 
+		
+			$topic_dir = getcwd() . '/' . $topic_folder_name;
+			
+			mkdir($topic_dir);
+			chdir($topic_dir);
+
 		}	
+
 
 
 		try {
 
 			$new_files_array = [];
-			$extensions = array("txt","pdf","img","jpg","docx","doc","png");
+			$extensions = array("pdf","img","jpg","docx","doc","png");
 		
 					
 			for ($i=0; $i < count($_FILES['files']['size']); $i++)	 { 
@@ -148,7 +239,7 @@ class Submission {
 
 					array_push($new_files_array, $_FILES['files']['name'][$i]);
 					move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($_FILES['files']['name'][$i]));
-	
+			
 				}else{
 					$GLOBALS['invalid_ext'] .=  '~' . $fileName;
 				}	
@@ -157,29 +248,27 @@ class Submission {
 
 				$_SESSION['new_files'] = $new_files_array;
 
+				$this->folder_details();
+
 			
 				} catch (Exception $e) {
 					echo '~~ Error! File couldnt be uploaded. Reason: ' . $e->getMessage();
 				}		
+
 	}
 
 
 
-	function email(){
-
-
-		//Know who is submitting these files 
-		$this->users_email();
+	//Saves uploders email content info and admins email info. Save and display for when we view it in Topics.php
+	function folder_details(){
 
 		$subject_admin_file = file_get_contents('/var/www/html/SillcoxWeb/subjectAdmin.txt');
 
+
 		if(strpos($subject_admin_file, $_SESSION['subject']) == false){
-			
 			$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
-		
 		}else{ 
 			//There is an admin for this subject
-
 			$subject_index	= strpos($subject_admin_file, '=');
 			//Gets rest of the line, which is the admin email for who is in charge of reviewing notes for this course. 
 			$adminEmail = substr($subject_admin_file,$subject_index + 1);
@@ -187,11 +276,32 @@ class Submission {
 			$_SESSION['emailTo'] = $adminEmail;
 		}
 
-		include_once('Email.php');
+
+		$uploader_email = $_SESSION['email'];
+		$admin_email = $_SESSION['emailTo'];
+
+
+		$content = 'Uploader:' . $uploader_email . "\n" . 'Admin:' . $admin_email; 
+	
+
+		//Writes details to file.
+		$fp = fopen(getcwd() . "/details.txt","wb");
+		fwrite($fp,$content);
+		fclose($fp);
 
 	}
 
 
+
+
+	function email(){
+
+		include_once('Email.php');
+	}
+
+
+
+	/*
 
 	function users_email(){
 
@@ -202,7 +312,7 @@ class Submission {
 		$rows = $result->fetch_assoc();
 		$_SESSION['email'] = $rows['Email'];
 
-	}
+	}*/
 
 
  
@@ -211,6 +321,9 @@ class Submission {
 
 
 $invalid_ext = '';
+
+
+
 
 $sub = new Submission();
 $sub->credentials();
@@ -225,6 +338,5 @@ if(empty($invalid_ext)){
 }else{
 	header('location: upload.php?~' . $GLOBALS['invalid_ext']);
 }
-
 
 ?>

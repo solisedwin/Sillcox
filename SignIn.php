@@ -13,7 +13,7 @@ session_start();
 			$_SESSION['username'] = $_POST['SignIn_Username'];
 			$_SESSION['password'] = $_POST['SignIn_Password'];
 			
-			$this->connect('localhost','root','xxxxxx','xxxxxx');
+			$this->connect('localhost','root','xxxxxx','xxxxx');
 
 		}
 
@@ -52,6 +52,19 @@ session_start();
 
 
 
+	function users_email(){
+
+		$username = $_SESSION['username'];
+
+		$users_email_query = "SELECT Email FROM Info WHERE Username = '$username' ";
+		$result = $this->query($users_email_query);
+		$rows = $result->fetch_assoc();
+		$_SESSION['email'] = $rows['Email'];
+
+	}
+
+
+
 		function sqlValidate(){
 
 			$user = $_SESSION['username'];
@@ -76,6 +89,11 @@ session_start();
 			
 				$this->isAdmin($user);
 				$_SESSION['authenticated'] = True;
+
+				//Save email info for session
+				$this->users_email();
+				
+
 				$this->closeConnection();
 				header('location: Hub.php');
 			

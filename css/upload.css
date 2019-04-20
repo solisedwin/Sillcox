@@ -145,22 +145,24 @@ input[type = file]{
 #file_div {
 
 	float: left;
-	margin-left: 20px;
+	margin-left: 100px;
 
 	border-style: dotted;
 	border-radius: 5px;
-	display: inline-block;
+	display: inline-block;	
 	width: 500px;
 
-	
 
 }
+
 
 #files_selected_div {
 
 	border-style: solid;
 	border-color: black;
 	border-width: 2px;
+
+
 
 	height: auto;
 

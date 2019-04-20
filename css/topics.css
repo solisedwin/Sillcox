@@ -1,0 +1,50 @@
+*{
+
+	margin: 0px;
+	padding: 0px;
+
+}
+
+
+body {
+
+	 overflow-x: hidden;
+     background-color: #e0d6af;
+}
+
+
+
+.topics_div {
+
+	margin-top: 230px;
+
+	position:relative;
+
+	width: 100%;
+	height: auto;
+
+	overflow: hidden;
+
+	display: inline-block;
+}
+	
+
+.folder_img {
+
+	height: 130px;
+	width: 130px;
+
+
+}
+
+
+
+hr {
+	width: 100%;
+	height: 0px;
+
+	color: black;
+	border-style: solid;
+
+}
+

@@ -53,7 +53,7 @@ if(!($_SESSION['authenticated'])){
 	
 	<h2>Search Notes for Subject</h2>
 
-	<form method="GET" action="Notes.php">
+	<form method="GET" action="Topics.php">
 
 				<select name="view_subject" style="width: 400px; height: 31px;">
 					<option value="Precalc">Pre Calculus</option>
@@ -97,7 +97,6 @@ if(!($_SESSION['authenticated'])){
 					unset($_SESSION['feedback']);
 					unset($_SESSION['emailTo']);
 
-
 				}else if (strpos($fullUrl, 'error=no_dir')) {
 					echo "<text class = 'error'> Sorry ! There arent any notes for that subject yet . </text>";
 				}
@@ -135,11 +134,6 @@ if(!($_SESSION['authenticated'])){
 
 
 	</form>
-
-
-
-
-
 
 
 	</center>

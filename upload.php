@@ -53,7 +53,6 @@ unset($_SESSION['subject']);
 
 
 
-
 	<div id = 'msg'>
 			<p>
 				
@@ -102,9 +101,13 @@ unset($_SESSION['subject']);
 					<br>
 					
 					<br>
-			<b>	<label>If Subject isnt listed, write it.<input type="text" placeholder="Specific Subject" name="specific_subject"> </label>  </b>
+			<b>	<label>If Subject isnt listed, write it.<input type="text" placeholder="Specific Subject" name="specific_subject" > </label>  </b>
+
+			<b><label>Specific topic: <input type="text" name="topic" placeholder="Example: '1D Integrals' "   required="required">	</label> </b>
 
 			</span>	
+			<br>
+
 			<br><br>
 
 			<hr>
@@ -126,14 +129,14 @@ unset($_SESSION['subject']);
 
 				<b>	<label>Submit Files</label> </b>
 
-				<input type="file" name="files[]"   id = 'selected_files'   size="9" multiple onchange="displayFile(this.value)"  style="cursor: pointer;">
+				<input type="file" name="files[]"  required="required"  id = 'selected_files'   size="9" multiple onchange="displayFile(this.value)"  style="cursor: pointer;">
 				<input type="reset" value="Reset" onclick="clear_para()" style="cursor: pointer;">
 
 			</div><br> <br> <br>	
 
 			<div id="files_selected_div">
+			<!-- Paragraph to write the file names that were selected -->
 				<p id="files_selected_para" style="height: auto; width: auto;">
-					
 			
 
 				</p>
@@ -162,7 +165,18 @@ unset($_SESSION['subject']);
 			echo "<text class = 'good'> File has been sent for review. Thank you for your contribution. </text>";
 			//Erase valid files that were previously uploaded. 
 			unset($_SESSION['new_files']);
+			unset($_SESSION['topic']);
+
+			if(isset($_SESSION['msg'])){
+				unset($_SESSION['msg']);
+			}
+
+
 		}
+		elseif (strpos($fullUrl, 'error=topic_err')) {
+			echo "<text class = 'error'> Error ! 'Topic' might be blank or empty.  </text>";
+		}
+
 
 		else if (strpos($fullUrl, 'error=size')){
 			echo "<text class = 'error'> Error ! File size is too large! Try to upload smaller files or one at a time. </text>";

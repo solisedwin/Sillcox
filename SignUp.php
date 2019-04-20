@@ -188,7 +188,7 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxxx','xxxxxx');
+$signup_obj->connect('localhost','root','xxxxx','xxxxx');
 $signup_obj->canRegister();	
 
 $signup_obj->insert_new_user();
@@ -196,10 +196,12 @@ $signup_obj->insert_new_user();
 $_SESSION['authenticated'] = True;
 $_SESSION['username'] = $_SESSION['su_username'];
 $_SESSION['password'] = $_SESSION['su_password'];
+$_SESSION['email'] = $_SESSION['su_email'];
 
 unset($_SESSION['su_username']);
 unset($_SESSION['su_password']);
 unset($_SESSION['su_password_again']);
+unset($_SESSION['su_email']);
 
 			
 header('location: Hub.php');	

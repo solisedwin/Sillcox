@@ -38,16 +38,16 @@ class Notes {
 
     		for($i = 2; $i < sizeof($files); $i++){
     
-    			$extension = pathinfo($files[$i], PATHINFO_EXTENSION);
+    			$extension = pathinfo($files[$i], PATHINFO_EXTENSION);   
     			$src = 'Notes/' . $_GET['view_subject'] . '/' . $files[$i];
 
 
     			echo '<center>';
+                echo '<br>';
 
     			//array("txt","pdf","img","jpg","docx","doc","png");
     			switch ($extension) {
     				case ($extension == 'png' || $extension == 'img' || $extension == 'jpg'):
-
 						echo "<img src= '$src' style='width:500px;height:520px;'> ";
     					continue;
 
@@ -55,10 +55,9 @@ class Notes {
                     case 'doc':
                         $doc_src = "Notes/Precalc/" . $files[$i];
 
-
-                        echo "<iframe align = 'center' height = '75%' width = '75%'src = " . $doc_src. ">";
+                        echo "<iframe align = 'center' height = '0%' width = '0%' src = " . $doc_src. ">";
                         echo '</iframe>';
-                                 
+                        
                         continue;
 
 

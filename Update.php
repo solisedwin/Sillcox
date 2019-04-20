@@ -9,7 +9,6 @@ Purpose:
 	- Changes Password
 	- Changes Username 
 	- Deletes Account 
-
 */
 class Update{
 
@@ -17,7 +16,7 @@ class Update{
 	private $conn;
 
 	function __construct(){
-		$this->connect('localhost','root','xxxxxxx','xxxxxx');
+		$this->connect('localhost','root','xxxxx','xxxxx');
 	}
 
 	function closeConnection(){
@@ -86,21 +85,6 @@ class Update{
 	}
 
 
-
-	function users_email(){
-
-		$username = $_SESSION['username'];
-
-		$users_email_query = "SELECT Email FROM Info WHERE Username = '$username' ";
-		$result = $this->query($users_email_query);
-		$rows = $result->fetch_assoc();
-		$_SESSION['email'] = $rows['Email'];
-		
-		return $_SESSION['email'];
-	}
-
-
-
 	function old_password_correct($old_password){
 			$sql_encrypt_password =  $this->sql_password();
 
@@ -118,7 +102,9 @@ class Update{
 
 	function sql_password(){
 
-		$email = $this->users_email();
+
+		$email = $_SESSION['email'];
+		//$email = $this->users_email();
 
 		$sql_encrypt_query = "SELECT Password FROM Info WHERE Email = '$email'";
 		$result = $this->query($sql_encrypt_query);
@@ -250,8 +236,6 @@ class Update{
 		} else{
 
 		}
-
-
 
 	}
 
