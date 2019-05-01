@@ -24,12 +24,18 @@ if(!($_SESSION['authenticated'])){
 
 <header>
 
+<!--  
 <img src="Images/logo.png">
+-->
+		<span style="display: inline-block; position: absolute; margin-top: 75px;">
+				<?php
 
-	<span>
-		<input type="search" name="search_query" placeholder="Search subject">
-		<img src="Images/search.png" id = 'search_icon'	style="cursor: pointer;" >
-	</span>
+				echo '<h2> Hello ' .  $_SESSION['username'] . '</h2>';
+
+				?>
+
+		</span>
+	
 
 		<div id = 'logOut_div' onclick="logOut()" style = "cursor: pointer; ">
 			<p>Log Out</p>
@@ -85,6 +91,8 @@ if(!($_SESSION['authenticated'])){
 
 
 			<?php
+				echo '<pre>';
+				var_dump($_SESSION);
 
 				$error = $_SERVER['QUERY_STRING'];	
 				$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	

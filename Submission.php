@@ -15,7 +15,7 @@ class Submission {
 	
 
 	function __construct() {
-		$this->connect('localhost','root','xxxxxx','xxxxx');
+		$this->connect('localhost','root','xxxx','xxxxx');
 	}
 
 	//closes mysql conneciton
@@ -92,7 +92,7 @@ class Submission {
 
 		for($i = 0; $i < count($_FILES['files']['name']); $i++){
 
-			$fileName = $_FILES['files']['name'][$i];
+			$fileName = trim($_FILES['files']['name'][$i]);
 			$ext = pathinfo($fileName, PATHINFO_EXTENSION);
 			
 
@@ -109,7 +109,7 @@ class Submission {
 	}
 
 
-
+	
 
 	function topic_directory_check($subject){
 
@@ -148,6 +148,7 @@ class Submission {
 		if(isset($_POST['specific_subject']) && !empty($_POST['specific_subject'])){
 
 			$subject = trim($_POST['specific_subject']);
+			$subject = preg_replace('/\s+/', '_', $subject);
 			$_SESSION['subject'] = $subject;
 
 		}else{
@@ -162,6 +163,9 @@ class Submission {
 			$_SESSION['msg'] = $_POST['msg'];
 		}
 	
+
+		$topic = preg_replace('/\s+/', '_', trim($_POST['topic']));
+		$_SESSION['topic'] = $topic;
 		
 	}
 
@@ -175,18 +179,15 @@ class Submission {
 
 		$this->set_session_variables();
 
-		
-		$topic = trim($_POST['topic']);
-		$_SESSION['topic'] = $topic;
 
 		$subject = $_SESSION['subject'];
-
 		$notesDir = __DIR__ . '/Notes/';
 
 
 		chdir($notesDir);
 		$subject_notes_dir = getcwd() . '/' . $subject;
 
+		$topic = $_SESSION['topic'];
 		
 		
 		//There isnt a specific directory for this subject
@@ -232,17 +233,22 @@ class Submission {
 			for ($i=0; $i < count($_FILES['files']['size']); $i++)	 { 
 
 				//Get extension
-				$fileName = $_FILES['files']['name'][$i];
+				$fileName = trim($_FILES['files']['name'][$i]);
+
+				//Filename has spaces in it
+				if(strpos($fileName, ' ')){
+					$fileName = preg_replace('/\s+/', '_', $fileName);
+				}
+
+
 				$ext = pathinfo($fileName, PATHINFO_EXTENSION);
 
 				if(in_array($ext, $extensions)){
 
-					array_push($new_files_array, $_FILES['files']['name'][$i]);
-					move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($_FILES['files']['name'][$i]));
+					array_push($new_files_array, $fileName);
+					move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($fileName));
 			
-				}else{
-					$GLOBALS['invalid_ext'] .=  '~' . $fileName;
-				}	
+				}
 
 			}
 
@@ -264,7 +270,7 @@ class Submission {
 
 		$subject_admin_file = file_get_contents('/var/www/html/SillcoxWeb/subjectAdmin.txt');
 
-
+		//No admin for this subject (maybe specfic subject); sent to SillcoxHelp
 		if(strpos($subject_admin_file, $_SESSION['subject']) == false){
 			$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
 		}else{ 
@@ -296,33 +302,15 @@ class Submission {
 
 	function email(){
 
-		include_once('Email.php');
+		require_once('Email.php');
 	}
 
 
-
-	/*
-
-	function users_email(){
-
-		$username = $_SESSION['username'];
-
-		$users_email_query = "SELECT Email FROM Info WHERE Username = '$username' ";
-		$result = $this->query($users_email_query);
-		$rows = $result->fetch_assoc();
-		$_SESSION['email'] = $rows['Email'];
-
-	}*/
-
-
- 
-	}//end of class 
+}//end of class 
 
 
 
 $invalid_ext = '';
-
-
 
 
 $sub = new Submission();

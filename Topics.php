@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-
 if(!($_SESSION['authenticated'])){
 	header('location: index.php');
 }
@@ -16,18 +15,34 @@ if(!($_SESSION['authenticated'])){
 </head>
 <body>
 
+
+<div class="topics_div" >
 	
 
-<div class="topics_div">
-	
+
+	<?php
+
+		$error = $_SERVER['QUERY_STRING'];	
+		$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
+
+			if(strpos($fullUrl, 'error=no_dir')){
+				echo "<text class = 'error'> Error. Notes dont exists for this topic. Sorry for the inconvenience.  </text>	";
+			}
+
+
+		?>
+
+
 
 
 <?php
 
-
 	function displayTopics() {
 
 		$subject = $_GET['view_subject'];
+
+		$_SESSION['subject'] = $subject;
+
 		$subject_dir = 	getcwd() . '/Notes/' . $subject;
 
 		if(is_dir($subject_dir)){
@@ -42,9 +57,12 @@ if(!($_SESSION['authenticated'])){
 		$topics = glob('*', GLOB_ONLYDIR);
 
 		foreach ($topics as $topic) {
-			
-			echo    '<h2>'  . $topic  . '</h2>';
-			echo '<img  src = /SillcoxWeb/Images/folder.png   class = folder_img >';
+
+			//Display topic with spaces if there are mutiple words					
+			$topic_title = str_replace('_', ' ', $topic);
+
+			echo    '<h2>'  . $topic_title  . '</h2>';
+			echo '<img src = /SillcoxWeb/Images/folder.png  id ="' . $topic . '" onclick = "view_notes(this)"; class = "folder_img">';
 			
 
 			//get details (uploader & admin email) from details.txt
@@ -57,8 +75,7 @@ if(!($_SESSION['authenticated'])){
 
 		}
 
-	}
-
+	}	
 
 
 
@@ -79,24 +96,36 @@ if(!($_SESSION['authenticated'])){
 		
 	}
 
-
-
-
 	displayTopics();
 
 
 
-
-
 ?>
-
-
-
+	
 
 </div>
 
 
+	<script type="text/javascript">
+		
 
+	function view_notes(folder){
+
+		console.log('Inside view_notes method');
+		//id of folder , topic you want to view;
+		var topic_name = folder.id;
+		console.log('Id name: ' + topic_name);
+
+		var url_encode = encodeURI('Notes.php?view_topic=' + topic_name);
+
+		window.location.href = url_encode;
+
+	}
+
+
+
+
+	</script>
 
 
 

@@ -23,10 +23,7 @@ unset($_SESSION['subject']);
 
 	<header>
 
-	<div>
-		
-		</div>
-
+	
 
 		<?php
 
@@ -55,16 +52,22 @@ unset($_SESSION['subject']);
 
 	<div id = 'msg'>
 			<p>
-				
-			The following link 'Upload Notes' is only provided to students who 
-			are deem responsible and have excelled in a certain academic subject. 
-			You can upload notes based on the subject you think you could contribute to.    			 
-
-			<br><br>
-			All submissions	will be sent to the website email for further inspection. Your email will be used to give credit
-			for your submission.    
-
+			Upload academic notes for a particular subject so that it appears online. All submissions will be sent to the designated reviewer/admin of this subject. If there isnt any reviewer for a particular subject, the notes will be sent to sillcoxhelp@gmail.com. Both the uploader and notes reviewer will receive credit for their work. 
 			</p>
+
+			<br>
+				
+				<h3 style="color: black;">
+				Acceptable file extensions: <br>
+				</h3>
+				<p style="color: green;">
+				(pdf, img, jpg, docx, doc, png)
+				</p>
+
+
+			
+
+
 
 	</div>
 
