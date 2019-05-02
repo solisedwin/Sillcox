@@ -15,7 +15,7 @@ class Submission {
 	
 
 	function __construct() {
-		$this->connect('localhost','root','xxxx','xxxxx');
+		$this->connect('localhost','root','xxxxx','xxxxx');
 	}
 
 	//closes mysql conneciton

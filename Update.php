@@ -16,7 +16,7 @@ class Update{
 	private $conn;
 
 	function __construct(){
-		$this->connect('localhost','root','xxxxx','xxxxx');
+		$this->connect('localhost','root','xxxxxx','xxxxx');
 	}
 
 	function closeConnection(){

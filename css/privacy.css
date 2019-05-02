@@ -1,0 +1,71 @@
+* {
+
+	margin: 0px;
+	padding: 0px;
+
+	overflow-x: hidden;
+
+
+}
+
+
+body{
+
+	background-color: #e5e4b9;
+}
+
+
+.header {
+
+	margin-left: 150px;
+	margin-top: 20px;
+
+}
+
+
+.header p {
+
+	font-size: 18px;
+
+}
+
+table {
+	width: 100%;
+	border-style: solid;
+	border-color: black;		
+	
+	margin-left: 140px;
+	white-space: nowrap;
+
+}
+
+
+table, th, td, thead {
+
+  border: 1px solid black;
+  border-collapse: collapse;
+  
+
+}
+
+
+tr {
+
+	height: 80px;
+
+}
+
+
+
+td {
+	font-size: 18px;	
+}
+
+a {
+
+	text-decoration: none;
+	color: blue;
+	font-size: 20px;
+	margin-left: 140px;
+	text-decoration: underline;
+}
