@@ -65,8 +65,7 @@ unset($_SESSION['subject']);
 				</p>
 
 
-			
-
+		
 
 
 	</div>
@@ -96,7 +95,7 @@ unset($_SESSION['subject']);
 						<option value="PhyII">Physics II</option>	
 						<option value="ChemI">Chemistry I</option>
 						<option value="ChemII">Chemistry II</option>			
-						<option value="CseI">Computer Science I</option>
+							<option value="CseI">Computer Science I</option>
 						<option value="MacroEco">Macro Economics</option>
 						<option value="MicroEco">Micro Economics</option>
 					</select>
@@ -108,6 +107,20 @@ unset($_SESSION['subject']);
 
 			<b><label>Specific topic: <input type="text" name="topic" placeholder="Example: '1D Integrals' "   required="required">	</label> </b>
 
+			<?php
+			if($_SESSION['admin']){
+
+				echo '<br>';
+				echo '<br>';
+
+				echo '<b>	<label> Email of user who sent the notes: <input required="required" type="Email" placeholder="Uploader Email" name="uploader" > </label>  </b>';
+
+			}
+
+
+			?>
+
+
 			</span>	
 			<br>
 
@@ -115,13 +128,20 @@ unset($_SESSION['subject']);
 
 			<hr>
 
-		<b>	<label  >Have a specific message involving the notes being sent? Please write the message below.</label> </b>
-			<textarea  cols="70" rows="7" style="font-size: 13px; margin-bottom: 10px;" name = 'msg'>
+			<?php 
+
+			if (!$_SESSION['admin']){
+			echo '
+			<b>	<label  >Have a specific message involving the notes being sent? Please write the message below.</label> </b>
+			
+			<textarea  cols="70" rows="7" style="font-size: 13px; margin-bottom: 10px;" name = msg>
 				
 
-			</textarea>
+			</textarea>';
 
-		
+		}
+
+		?>
 			
 			<hr style="position: inherit; top: 10px;">
 

@@ -16,7 +16,7 @@ class Update{
 	private $conn;
 
 	function __construct(){
-		$this->connect('localhost','root','xxxxxx','xxxxx');
+		$this->connect('localhost','root','xxxxxxxxxxxxx','xxxxxxx');
 	}
 
 	function closeConnection(){
@@ -97,7 +97,7 @@ class Update{
 				$this->headerErrors('old_password_incorrect');
 			}
 		}
-
+		
 
 
 	function sql_password(){
@@ -153,13 +153,26 @@ class Update{
 			$this->headerErrors('delete_account');
 		}
 
-		$email = $_SESSION['su_email'];
+		//Remove email from text files. In order to stop receiving emails about notes
+		$this->fileRemove($_SESSION['email']);
+
+		//Deletes from SQL database.
+		$email = $_SESSION['email'];
 		$delete_query = "Delete FROM Info WHERE Email = '$email'";
 
 		$this->query($delete_query);
 		header('location: index.php?stat=delete_account');
 		die();
 
+	}
+
+
+	function fileRemove($email){
+
+		$admin_file = file_get_contents('subjectAdmin.txt');
+		$admin_file = str_replace($email, 'sillcoxhelp@gmail.com', $admin_file);
+
+		file_put_contents('subjectAdmin.txt', $admin_file);
 	}
 
 	
@@ -186,16 +199,17 @@ class Update{
 		}
 
 
+
 		//Check to see if there isnt already a user with that name in the database.
 		$this->user_already_exists($new_username);
 
 		//Change username
-		$email  = $_SESSION['su_email'];
+		$email  = $_SESSION['email'];
 
 		$sql_change_username = "UPDATE Info Set Username = '$new_username' WHERE Email = '$email';";
 		$this->query($sql_change_username);
 
-		// ** Change session variable so it displays in website **
+		// ** Change session variable so it displays in website **	
 		$_SESSION['username'] = $new_username;
 
 		header('location: Settings.php?status=username_changed');
@@ -212,8 +226,9 @@ class Update{
 		$user_exits_query = "SELECT * FROM Info WHERE Username = '$new_username' ";	
 	 	$results = $this->query($user_exits_query);
 
-	 	if($results->num_of_rows > 0){
+	 	if($results->num_rows > 0){
 	 		$this->headerErrors('username_taken');
+	 		die();
 	 	}
 	}
 
@@ -221,6 +236,7 @@ class Update{
 
 
 	function main(){
+	
 
 		if(isset($_POST['old_password']) && isset($_POST['new_password']) && isset($_POST['confirm_new_password'])){
 			$this->password_credentials();
@@ -247,7 +263,6 @@ class Update{
 
 $update = new Update();
 $update->main();
-
 
 
 ?>

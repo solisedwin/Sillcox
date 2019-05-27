@@ -18,6 +18,11 @@ body {
 
 }
 
+.good{
+	font-size: 20px;
+	color: green;
+}
+
 .error { 
 
 	color: red;
@@ -184,6 +189,37 @@ header p {
 	position: absolute;
 
 }
+
+
+.upload_div {
+
+	margin-top: 30px;
+	
+	border-style: dashed;
+	max-width: 200px;
+	height: 100px;
+
+}
+
+
+.upload_div button {
+
+	height: 90px;
+	width: 150px;
+	margin-top: 5px;
+
+
+}
+
+
+.upload_div button p {
+
+	font-size: 20px;
+	display: inline-block;
+
+}
+
+
 
 footer{
 

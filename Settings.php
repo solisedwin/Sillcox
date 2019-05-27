@@ -20,7 +20,7 @@ if(!($_SESSION['authenticated'])){
 <header>	
 
 <?php
-	echo "<p  id = 'greeting'> Hello $_SESSION[username] </p> ";
+	echo "<b>	<p  id = 'greeting'   style = 'margin-top: 75px;'	> Hello $_SESSION[username] </p> </b>";
 
 ?>
 

@@ -12,10 +12,9 @@ Purpose:
 
 */
 class Submission {
-	
 
 	function __construct() {
-		$this->connect('localhost','root','xxxxx','xxxxx');
+		$this->connect('localhost','root','xxxxxx','xxxxxx');
 	}
 
 	//closes mysql conneciton
@@ -70,7 +69,6 @@ class Submission {
 		$uploadSize = 0;
 		for($i = 0; $i < count($_FILES['files']['size']); $i++){
 			
-			$fileName = $_FILES['files']['name'][$i];
 			$fileSize = $_FILES['files']['size'][$i];
 
 			$uploadSize += $fileSize;
@@ -201,11 +199,9 @@ class Submission {
 			
 			$topic_dir = getcwd() . '/' . $topic;
 
-
 			mkdir($topic_dir);
 			chdir($topic_dir);
 
-	
 		}
 		//There is already a directory with this specific subject
 		else{
@@ -221,40 +217,76 @@ class Submission {
 			chdir($topic_dir);
 
 		}	
+		
+	}
+
+	function set_temp_dir(){
+
+		chdir('/var/www/html/SillcoxWeb');
 
 
+		if(!is_dir(getcwd() . '/tmp_uploads')){
+
+			echo '** Made new dir **';
+			$tmp_dir =  getcwd() . '/tmp_uploads';
+			mkdir($tmp_dir);
+
+		}
+
+	}
+
+
+
+	function uploaded_notes(){
+
+		echo '<pre>';
+		var_dump($_FILES);
 
 		try {
-
+	
 			$new_files_array = [];
 			$extensions = array("pdf","img","jpg","docx","doc","png");
-		
-					
-			for ($i=0; $i < count($_FILES['files']['size']); $i++)	 { 
+	
 
-				//Get extension
-				$fileName = trim($_FILES['files']['name'][$i]);
+			for ($i = 0; $i < count($_FILES['files']['size']); $i++) { 
+
+				$fileName =  ($_FILES['files']['name'][$i]);
+				$tmp_file = $_FILES['files']['tmp_name'][$i];
+
 
 				//Filename has spaces in it
 				if(strpos($fileName, ' ')){
-					$fileName = preg_replace('/\s+/', '_', $fileName);
+				  $fileName = preg_replace('/\s+/', '_', $fileName);
 				}
 
 
 				$ext = pathinfo($fileName, PATHINFO_EXTENSION);
 
-				if(in_array($ext, $extensions)){
+				if(in_array($ext, $extensions) && is_uploaded_file($tmp_file)) {
 
-					array_push($new_files_array, $fileName);
-					move_uploaded_file($_FILES['files']['tmp_name'][$i], getcwd() . '/'. ($fileName));
-			
+					//Add uploaded files to array 
+					//array_push($new_files_array, $_FILES['files']['tmp_name'][$i]);
+
+
+					//User is admin, so they can upload notes.
+					if($_SESSION['admin']){
+					 	move_uploaded_file($tmp_file, getcwd() . '/'. ($fileName));
+					}else{
+						//move to temp folder. Email content of folder, then delete content
+						chdir('/var/www/html/SillcoxWeb');
+
+						move_uploaded_file($tmp_file, getcwd() . '/tmp_uploads/' . $fileName);
+
+
+					}
+
+
 				}
 
 			}
 
-				$_SESSION['new_files'] = $new_files_array;
 
-				$this->folder_details();
+				//$_SESSION['new_files'] = $new_files_array;
 
 			
 				} catch (Exception $e) {
@@ -265,8 +297,7 @@ class Submission {
 
 
 
-	//Saves uploders email content info and admins email info. Save and display for when we view it in Topics.php
-	function folder_details(){
+	function emailTo(){
 
 		$subject_admin_file = file_get_contents('/var/www/html/SillcoxWeb/subjectAdmin.txt');
 
@@ -277,18 +308,32 @@ class Submission {
 			//There is an admin for this subject
 			$subject_index	= strpos($subject_admin_file, '=');
 			//Gets rest of the line, which is the admin email for who is in charge of reviewing notes for this course. 
-			$adminEmail = substr($subject_admin_file,$subject_index + 1);
+			$adminEmail = trim(substr($subject_admin_file,$subject_index + 1));
 
 			$_SESSION['emailTo'] = $adminEmail;
 		}
 
 
-		$uploader_email = $_SESSION['email'];
+	}
+
+
+
+
+	//Saves uploders email content info and admins email info. Save and display for when we view it in Topics.php
+	function folder_details(){
+
+		//Find correct admin for this subject . And give them credit. 
+		$this->emailTo();
 		$admin_email = $_SESSION['emailTo'];
 
+		if(isset($_POST['uploader'])){
+			$uploader_email = $_POST['uploader'];
+		}else{
+			$uploader_email = 'sillcoxhelp@gmail.com';
+		}
 
-		$content = 'Uploader:' . $uploader_email . "\n" . 'Admin:' . $admin_email; 
-	
+
+		$content = 'Uploader:' . $uploader_email . "\n" . 'Admin:' . $admin_email; 	
 
 		//Writes details to file.
 		$fp = fopen(getcwd() . "/details.txt","wb");
@@ -298,13 +343,63 @@ class Submission {
 	}
 
 
+	//Remove all tmp files client sent after emailing them. To make room for further notes
+	function delete_tmpfiles(){
+
+		$tmp_dir = getcwd() . '/tmp_uploads';
+
+		if(is_dir($tmp_dir)){
+
+			$tmp_files = scandir($tmp_dir);
+
+			foreach ($tmp_files as $file) {
+				unlink($tmp_dir . '/' . $file);
+			}
+		}
 
 
-	function email(){
-
-		require_once('Email.php');
 	}
 
+
+ 
+	function main(){
+
+
+		$this->credentials();
+
+		//Current user isnt admin(Status: 0). Emails notes to subject admin 
+		if(!$_SESSION['admin']){
+
+			$this->set_session_variables();
+			$this->set_temp_dir();
+			$this->uploaded_notes();
+			
+			//Know who to email notes to and write txt file of uploader for credit
+			$this->emailTo();	
+
+			echo '<pre>';
+			var_dump($_SESSION);
+
+			require_once('Email.php');
+
+			$this->delete_tmpfiles();
+
+			header('location: upload.php?upload=sent');
+		
+		}
+		//Current user is an admin, so we trust there notes. Thus notes automatically gets uploaded to site. 
+		else{		
+
+			$this->save();
+			$this->uploaded_notes();
+			$this->folder_details();
+			header('location: upload.php?upload=sent');
+
+		}
+
+		
+		
+	}
 
 }//end of class 
 
@@ -314,11 +409,9 @@ $invalid_ext = '';
 
 
 $sub = new Submission();
-$sub->credentials();
-$sub->save();
-$sub->email();
+$sub->main();
 
-
+/*
 
 //All files uploaded were valid. Passsed credentials. 
 if(empty($invalid_ext)){
@@ -326,5 +419,5 @@ if(empty($invalid_ext)){
 }else{
 	header('location: upload.php?~' . $GLOBALS['invalid_ext']);
 }
-
+*/
 ?>

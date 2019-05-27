@@ -19,7 +19,7 @@ if(!($_SESSION['authenticated'])){
 <div class="topics_div" >
 	
 
-
+	<!-- If they click on topic notes, but notes dont exist or were deleted --> 
 	<?php
 
 		$error = $_SERVER['QUERY_STRING'];	
@@ -39,9 +39,9 @@ if(!($_SESSION['authenticated'])){
 
 	function displayTopics() {
 
-		$subject = $_GET['view_subject'];
+		$_SESSION['subject'] =  $_GET['view_subject'];
 
-		$_SESSION['subject'] = $subject;
+		$subject = $_SESSION['subject'];
 
 		$subject_dir = 	getcwd() . '/Notes/' . $subject;
 

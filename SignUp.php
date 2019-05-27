@@ -79,7 +79,7 @@ class SignUp {
 	
 	function usernameTaken(){
 
-		$username = $_SESSION['su_username'];
+		$username = trim($_SESSION['su_username']);
 			
 		if(strlen($username) < 4){
 			header('location: index.php?error=short_user');
@@ -87,13 +87,14 @@ class SignUp {
 		} if(strlen($username) > 20){
 			header('location: index.php?error=long_user');
 			die();
+		}if(strpos($username, ' ')){
+			header('location: index.php?error=whitespace');
+			die();
 		}
 
 		
 		$username_query = "SELECT * FROM Info Where Username = '$username';";	
 		$result = $this->query($username_query);
-		echo '<br>Query: ' . $username_query;
-
 
 		echo 'Rows: ' . $result->num_rows;
 
@@ -110,9 +111,9 @@ class SignUp {
 	
 	function validPassword(){
 
-		$password = $_SESSION['su_password'];
+		$password = trim($_SESSION['su_password']);
 
-		if(strlen($password) < 4){
+		if(strlen($password) < 5){
 			header('location: index.php?error=short_pd');
 			die();
 		}
@@ -132,6 +133,9 @@ class SignUp {
 		} 
 		if(!preg_match('@[A-Z]@', $password)){
 			header('location: index.php?error=upper_pd');
+			die();
+		}if(strpos($password, ' ')){
+			header('location: index.php?error=pass_whitespace');
 			die();
 		}
 
@@ -188,7 +192,7 @@ class SignUp {
 
 
 $signup_obj = new SignUp();
-$signup_obj->connect('localhost','root','xxxxx','xxxxx');
+$signup_obj->connect('localhost','root','xxxxxxxx','xxxxxxxxx');
 $signup_obj->canRegister();	
 
 $signup_obj->insert_new_user();

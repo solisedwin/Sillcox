@@ -1,3 +1,4 @@
+
 <?php
 session_start();
 
@@ -29,9 +30,7 @@ if(!($_SESSION['authenticated'])){
 -->
 		<span style="display: inline-block; position: absolute; margin-top: 75px;">
 				<?php
-
 				echo '<h2> Hello ' .  $_SESSION['username'] . '</h2>';
-
 				?>
 
 		</span>
@@ -47,12 +46,11 @@ if(!($_SESSION['authenticated'])){
 
 	
 		<span id = 'upload_span'>
-		<p  style = 'font-size: 25px; cursor: pointer;' onclick='uploadNotes()'	> Upload Notes </p> 
+		<p  style = 'font-size: 25px; cursor: pointer;' onclick='uploadNotes()'	> Submit Notes </p> 
 		</span>
 
 
 </header>
-
 
 <center>
 	<div id = 'notes_div'>
@@ -78,21 +76,44 @@ if(!($_SESSION['authenticated'])){
 					<option value="CseI">Computer Science I</option>
 					<option value="MacroEco">Macro Economics</option>
 					<option value="MicroEco">Micro Economics</option>
+
+					<?php  
+					
+					$init_subjects = array('Precalc','CalcI','CalcII','CalcIII','CalcIV','Stat','Discrete_Math','Micro_Bio','Anatomy_Phy_I','PhyI',
+						'PhyII','ChemI','ChemII','CseI','MacroEco','MicroEco');
+
+					$notes_dir = __DIR__ . '/Notes/';
+					chdir($notes_dir);
+
+					$topics = glob('*', GLOB_ONLYDIR);
+
+					foreach ($topics as $topic) {
+
+						//not original choices
+						if(!in_array($topic, $init_subjects)){
+
+						$topic_spaces = str_replace('_', ' ', $topic);
+						echo "<option value='$topic'>" . ($topic_spaces) . "</option>";
+						
+						}
+					
+					}
+					?>
+
+
+
 				</select>
 
 				<br>
 
 				<input type="Submit" id = 'view_btn' name="Submit" value="View Notes">
 
-			</form>
-
-					
+			</form>		
 		</div>
 
 
 			<?php
-				echo '<pre>';
-				var_dump($_SESSION);
+				
 
 				$error = $_SERVER['QUERY_STRING'];	
 				$fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
@@ -100,7 +121,7 @@ if(!($_SESSION['authenticated'])){
 				if(strpos($fullUrl, 'error=empty_feedback')){
 					echo "<text class = 'error'> Error. Feedback message is empty </text>	";
 				}else if(strpos($fullUrl, 'feedback=sent')){
-					echo "<text class = 'error'> Feedback has been sent ! </text>";
+					echo "<text class = 'good'> Feedback has been sent ! </text>";
 
 					unset($_SESSION['feedback']);
 					unset($_SESSION['emailTo']);
@@ -112,6 +133,7 @@ if(!($_SESSION['authenticated'])){
 
 			?>
 
+		
 
 	</center>
 
@@ -124,8 +146,7 @@ if(!($_SESSION['authenticated'])){
 	
 	
 	<center>
-		<h3 >Have comments, questions, or concerns about the website? Email us your 
-		feedback </h3>
+		<h3> Have comments, questions, or concerns about the website? Or request to be an admin for a specific subject? Email us. </h3>
 
 
 
@@ -174,6 +195,10 @@ function uploadNotes(){
 function settings(){
 	window.location.href = 'Settings.php';
 
+}
+
+function admin(){
+	window.location.href = 'Admin.php';
 }
 
 

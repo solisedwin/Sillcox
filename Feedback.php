@@ -9,7 +9,7 @@ session_start();
 
 		function __construct(){
 			
-			$this->connect('localhost','root','xxxxxx','xxxxx');
+			$this->connect('localhost','root','xxxxxxxxxx','xxxxxxxxxx');
 		}
 
 		function closeConnection(){
@@ -65,7 +65,7 @@ session_start();
 
 
 $obj = new Feedback();
-$obj->getEmail();
+//$obj->getEmail();
 $obj->send_feedback();
 $obj->closeConnection();
 

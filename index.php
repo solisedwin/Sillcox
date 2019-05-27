@@ -19,9 +19,6 @@
 <body>
 
 
-
-
-
 <center>
 <div id="message">
 <label>Sillcox Note Hub </label>
@@ -52,6 +49,7 @@ different classes. Contribute to the betterment of our fellow peers.
 
 <?php
 
+
 $error = $_SERVER['QUERY_STRING'];	
 $fullUrl = $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];	
 
@@ -62,6 +60,11 @@ if(strpos($fullUrl, 'error=scholars')){
 
 }else if (strpos($fullUrl, 'error=username')) {
 	echo "<text class = 'error'> Sorry! Username is already taken. Enter a different username. </text>	";
+}else if (strpos($fullUrl, 'error=pass_whitespace')) {
+	echo "<text class = 'error'> Error! Cant have spaces inside password. </text>	";
+}
+else if (strpos($fullUrl, 'error=whitespace')) {
+	echo "<text class = 'error'> Error! Cant have spaces inside username </text>	";
 }else if (strpos($fullUrl, 'error=short_pd')) {
 	echo "<text class = 'error'> Password is too short. Password must be atleast of length 5 </text>	";
 }else if (strpos($fullUrl, 'error=num_pd')) {
@@ -75,7 +78,7 @@ if(strpos($fullUrl, 'error=scholars')){
 }else if (strpos($fullUrl, 'error=long_pd')) {
 	echo "<text class = 'error'> Password is too long. Sorry. Max is 25. </text>	";
 }else if (strpos($fullUrl, 'error=long_user')) {
-	echo "<text class = 'error'> Username is too long. Max is 20. Sorry </text>	";
+	echo "<text class = 'error'> Username is too long. Max is 20.</text>	";
 }else if (strpos($fullUrl, 'error=email_taken')) {
 	echo "<text class = 'error'> Email is already taken !! Account already made !! </text>	";
 }else if (strpos($fullUrl, 'stat=logout')) {

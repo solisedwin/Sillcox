@@ -35,7 +35,7 @@
 			}else if(strpos($url, 'delete_account')){
 				$this->output_message('You didnt write it correctly ! Please write "delete my account" as the input');
 			}else if(strpos($url, 'username_unequal')){
-				$this->output_message('New username and confirm username are not the same value! Make sure you wrote both correctly and the same');
+				$this->output_message('New username and confirm username are not the same value! Make sure you wrote both correctly.');
 			}else if(strpos($url, 'username_short')){
 				$this->output_message('Username is too short. Username must be more than 4 characters long');
 			}else if(strpos($url, 'username_long')){
