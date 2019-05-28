@@ -14,7 +14,7 @@ Purpose:
 class Submission {
 
 	function __construct() {
-		$this->connect('localhost','root','xxxxxx','xxxxxx');
+		$this->connect('localhost','root','xxxxxxxx','xxxxxxx');
 	}
 
 	//closes mysql conneciton
@@ -225,7 +225,7 @@ class Submission {
 		chdir('/var/www/html/SillcoxWeb');
 
 
-		if(!is_dir(getcwd() . '/tmp_uploads')){
+		if(!is_dir(getcwd() . '/tmp_uploads') ){
 
 			echo '** Made new dir **';
 			$tmp_dir =  getcwd() . '/tmp_uploads';
@@ -299,19 +299,29 @@ class Submission {
 
 	function emailTo(){
 
-		$subject_admin_file = file_get_contents('/var/www/html/SillcoxWeb/subjectAdmin.txt');
+		if(file_exists('subjectAdmin.json')){
 
-		//No admin for this subject (maybe specfic subject); sent to SillcoxHelp
-		if(strpos($subject_admin_file, $_SESSION['subject']) == false){
+		$json_tabs = file_get_contents('subjectAdmin.json');
+
+		//Remove tabs from json file
+		$json_tabs = trim(preg_replace('/\t+/', '', $json_tabs));
+		$json = json_decode($json_tabs,true);
+
+
+		if(!isset($json['Subjects'][$_SESSION['subject']])){
 			$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
-		}else{ 
-			//There is an admin for this subject
-			$subject_index	= strpos($subject_admin_file, '=');
-			//Gets rest of the line, which is the admin email for who is in charge of reviewing notes for this course. 
-			$adminEmail = trim(substr($subject_admin_file,$subject_index + 1));
+		}else{
 
-			$_SESSION['emailTo'] = $adminEmail;
+		$admin = $json['Subjects'][$_SESSION['subject']];
+
+		echo 'Admin: ' . $admin;
+		$_SESSION['emailTo'] = $admin;
+
 		}
+		
+	}else{
+		$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
+	}
 
 
 	}

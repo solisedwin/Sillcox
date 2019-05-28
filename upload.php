@@ -187,7 +187,8 @@ unset($_SESSION['subject']);
 		else if (strpos($fullUrl, 'upload=sent')){
 			echo "<text class = 'good'> File has been sent for review. Thank you for your contribution. </text>";
 			//Erase valid files that were previously uploaded. 
-			unset($_SESSION['new_files']);
+		
+	
 			unset($_SESSION['topic']);
 
 			if(isset($_SESSION['msg'])){
