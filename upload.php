@@ -184,12 +184,14 @@ unset($_SESSION['subject']);
 		if(strpos($fullUrl, 'error=empty')){
 			echo "<text class = 'error'> Error ! You didnt upload any files.  </text>";
 		}
-		else if (strpos($fullUrl, 'upload=sent')){
+		else if (strpos($fullUrl, 'upload=email')){
 			echo "<text class = 'good'> File has been sent for review. Thank you for your contribution. </text>";
 			//Erase valid files that were previously uploaded. 
 		
 	
 			unset($_SESSION['topic']);
+			unset($_SESSION['subject']);
+			unset($_SESSION['emailTo']);
 
 			if(isset($_SESSION['msg'])){
 				unset($_SESSION['msg']);
@@ -197,6 +199,20 @@ unset($_SESSION['subject']);
 
 
 		}
+
+		else if (strpos($fullUrl, 'upload=sent')){
+			echo "<text class = 'good'> File has uploaded. Thank you for your contribution. </text>";
+
+
+			unset($_SESSION['topic']);
+			unset($_SESSION['subject']);
+			unset($_SESSION['emailTo']);
+			unset($_POST);
+
+
+		}
+
+
 		elseif (strpos($fullUrl, 'error=topic_err')) {
 			echo "<text class = 'error'> Error ! 'Topic' might be blank or empty.  </text>";
 		}

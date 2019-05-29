@@ -14,7 +14,7 @@ Purpose:
 class Submission {
 
 	function __construct() {
-		$this->connect('localhost','root','xxxxxxxx','xxxxxxx');
+		$this->connect('localhost','root','xxxxx','xxxxx');
 	}
 
 	//closes mysql conneciton
@@ -108,10 +108,8 @@ class Submission {
 
 
 	
-
+	//check if topic dir name already exists, if so. Just append a number to it.
 	function topic_directory_check($subject){
-
-		//check if topic dir name already exists, if so. Just append a number to it.
 
 		//all directories within the subject folder 
 		$dirs = glob("*", GLOB_ONLYDIR);
@@ -119,6 +117,15 @@ class Submission {
 		$count_dir = 0;
 
 		for($i = 0; $i < count($dirs); $i++){
+			
+			//Ex: Functions(1), need to check for () to check exact topic value. Remove ()
+			if(strpos($dirs[$i], '(') && strpos($dirs[$i], ')')){
+
+				$parenthesis_index = strpos($dirs[$i], '(');
+				$dirs[$i] = substr($dirs[$i], 0, $parenthesis_index);	
+			}
+
+
 			if($dirs[$i] == $subject){
 				$count_dir += 1; 
 			}
@@ -239,9 +246,6 @@ class Submission {
 
 	function uploaded_notes(){
 
-		echo '<pre>';
-		var_dump($_FILES);
-
 		try {
 	
 			$new_files_array = [];
@@ -280,7 +284,6 @@ class Submission {
 
 					}
 
-
 				}
 
 			}
@@ -299,29 +302,34 @@ class Submission {
 
 	function emailTo(){
 
+		chdir('/var/www/html/SillcoxWeb/');
+
 		if(file_exists('subjectAdmin.json')){
 
-		$json_tabs = file_get_contents('subjectAdmin.json');
+			echo '** File exists **';
 
-		//Remove tabs from json file
-		$json_tabs = trim(preg_replace('/\t+/', '', $json_tabs));
-		$json = json_decode($json_tabs,true);
+			$json_tabs = file_get_contents('subjectAdmin.json');
+
+			//Remove tabs from json file
+			$json_tabs = trim(preg_replace('/\t+/', '', $json_tabs));
+			$json = json_decode($json_tabs,true);
 
 
-		if(!isset($json['Subjects'][$_SESSION['subject']])){
-			$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
-		}else{
+			if(!isset($json['Subjects'][$_SESSION['subject']])){
+				$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
+			}else{
 
-		$admin = $json['Subjects'][$_SESSION['subject']];
+				$admin = $json['Subjects'][$_SESSION['subject']];
 
-		echo 'Admin: ' . $admin;
-		$_SESSION['emailTo'] = $admin;
+				echo 'Admin: ' . $admin;
+				$_SESSION['emailTo'] = $admin;
 
-		}
-		
-	}else{
-		$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
-	}
+			}
+			
+			}else{
+				echo '**** File does not exists!!!!';
+				$_SESSION['emailTo'] = 'sillcoxhelp@gmail.com';
+			}
 
 
 	}
@@ -330,11 +338,14 @@ class Submission {
 
 
 	//Saves uploders email content info and admins email info. Save and display for when we view it in Topics.php
-	function folder_details(){
+	function folder_details($notes_dir){
 
 		//Find correct admin for this subject . And give them credit. 
 		$this->emailTo();
 		$admin_email = $_SESSION['emailTo'];
+
+		//Change to notes dir. So that we can put details.txt
+		chdir($notes_dir);
 
 		if(isset($_POST['uploader'])){
 			$uploader_email = $_POST['uploader'];
@@ -342,13 +353,14 @@ class Submission {
 			$uploader_email = 'sillcoxhelp@gmail.com';
 		}
 
-
 		$content = 'Uploader:' . $uploader_email . "\n" . 'Admin:' . $admin_email; 	
 
 		//Writes details to file.
 		$fp = fopen(getcwd() . "/details.txt","wb");
 		fwrite($fp,$content);
 		fclose($fp);
+
+
 
 	}
 
@@ -394,17 +406,22 @@ class Submission {
 
 			$this->delete_tmpfiles();
 
-			header('location: upload.php?upload=sent');
-		
+			header('location: upload.php?upload=email');
+			die();
 		}
 		//Current user is an admin, so we trust there notes. Thus notes automatically gets uploaded to site. 
 		else{		
 
 			$this->save();
 			$this->uploaded_notes();
-			$this->folder_details();
-			header('location: upload.php?upload=sent');
 
+			//We are now in the dir of subject notes
+			$subject_notes_dir = getcwd();
+
+			$this->folder_details($subject_notes_dir);
+			
+			header('location: upload.php?upload=sent');
+			die();
 		}
 
 		

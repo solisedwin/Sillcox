@@ -56,8 +56,16 @@ if(!($_SESSION['authenticated'])){
 	
 		$topics = glob('*', GLOB_ONLYDIR);
 
+		if(count($topics) == 0){
+			header('location: Hub.php?error=no_dir');			
+		}
+	
+
 		foreach ($topics as $topic) {
 
+			//Goes back to list of all topics
+			chdir('/var/www/html/SillcoxWeb/Notes/' . $subject);
+			
 			//Display topic with spaces if there are mutiple words					
 			$topic_title = str_replace('_', ' ', $topic);
 
@@ -70,8 +78,9 @@ if(!($_SESSION['authenticated'])){
 
 			echo '<h4>Uploader: ' . $details_array[0] . '</h4>';
 			echo '<h4>Notes Reviewer: ' . $details_array[1] . '</h4>';
-
 			echo '<hr>';
+
+	
 
 		}
 
@@ -80,9 +89,10 @@ if(!($_SESSION['authenticated'])){
 
 
 	function folderDetails($topic){
-
+	
 		//Inside topic folder
 		chdir(getcwd() . '/' . $topic);
+
 		$details = file_get_contents('details.txt');
 
 		//$uploader_email_index = strpos($details, 'Uploader:', );

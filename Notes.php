@@ -103,7 +103,7 @@ class Notes {
     			//array("pdf","img","jpg","docx","doc","png");   
                 switch ($extension) {
                     case ($extension == 'png' || $extension == 'img' || $extension == 'jpg'):
-						echo "<img src= " . $src . " style= 'width:90%; height:850px;' > ";
+						echo "<img src= " . $src . " style= 'width:70%; height:800px;' > ";
     					continue;
 
                     case 'doc':
